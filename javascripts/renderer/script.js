@@ -79,7 +79,7 @@ function main() {
        return rotatedPolygon;
     }
     
-    function centerizePolygon(sourcePolygon, numVertex) {
+    function movePolygonToCenter(sourcePolygon, numVertex) {
         
         var movedPolygon = {
             vertex: [ new Vertex(), new Vertex(), new Vertex() ],
@@ -145,7 +145,6 @@ function main() {
     }
     
     function scanEdges(polygon) {
-        // here assuming that the polygon is triangle
         scanEdge(polygon.vertex[0], polygon.vertex[1], polygon.color[0], polygon.color[1]);
         scanEdge(polygon.vertex[1], polygon.vertex[2], polygon.color[1], polygon.color[2]);
         scanEdge(polygon.vertex[2], polygon.vertex[0], polygon.color[2], polygon.color[0]);
@@ -162,7 +161,7 @@ function main() {
     
     function render() {
         
-        // clear the bufferes
+        // clear the edge-bufferes
         for(var i = 0; i < canvas.height; i++) {
             xBufL[i] = Number.MAX_VALUE;
             xBufR[i] = Number.MAX_VALUE * -1;
@@ -171,18 +170,16 @@ function main() {
         // rotate and move the polygon
         var translatedPolygon = rotatePolygonForX(sourcePolygon, 3, angleX);
         translatedPolygon = rotatePolygonForY(translatedPolygon, 3, angleY);
-        translatedPolygon = centerizePolygon(translatedPolygon, 3);
+        translatedPolygon = movePolygonToCenter(translatedPolygon, 3);
         
         scanEdges(translatedPolygon);
         
         // clear the screen
-        context.beginPath();
-        context.strokeStyle = 'rgb(0, 0, 0)';
         context.clearRect(0, 0, canvas.width, canvas.height);
+        context.strokeStyle = 'rgb(0, 0, 0)';
         context.strokeRect(0, 0, canvas.width, canvas.height);
-        context.closePath();
         
-        // draw the polygon along with its edge-information
+        // draw the polygon along with its edge-buffer
         for(var yi = 0; yi < canvas.height; yi++) {
             
             if (xBufL[yi] > xBufR[yi]) { continue; }
