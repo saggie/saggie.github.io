@@ -1,16 +1,17 @@
 
 // タル変数
-var taruSize = 10;
-var taruRadius = taruSize / 2;
+const taruSize = 8;
+const taruRadius = parseInt(taruSize / 2);
 var tarus = []; // タルリスト
-var taruMax = 256;
+const taruMax = 255;
+const gravity = 0.3;
 
-var restTaru = 0.8; // タルの反発係数(restitution)
-var restFloor = 0.5; // 床の反発係数
+const restTaru = 0.9; // タル同士の反発係数(restitution)
+const restFloor = 0.5; // 床の反発係数
 var calculatedList = [];
 
-var taruSpawnX = 20;
-var taruSpawnY = 40;
+const taruSpawnX = 70;
+const taruSpawnY = 40;
 var nextTaruThrowingInterval = 0;
 var previousTaruThrownTime = 0;
 
@@ -23,17 +24,19 @@ var taruProto = {
     getPy : function () { return this.py; },
 
     step : function () {
-        // Hit Check
+
+      var isGrounded = false; // このフレーム内で接地したかどうか
+
+        // タル同士の当たり判定 begin
         if (tarus) {
             for (var i = calculatedList.length; i < tarus.length; i++) {
 
-                if (i == this.id) {
-                    continue;
-                }
+              // 自分同士はスキップ
+              if (i == this.id) { continue; }
 
                 if (isHit(this.px, this.py, tarus[i].px, tarus[i].py, taruSize)) {
 
-                    // update positions between tarus
+                    // update positions
                     var dx = distance(this.px, tarus[i].px) / 6; // 要調整
                     var dy = distance(this.py, tarus[i].py) / 6;
                     if (this.px < tarus[i].px) {
@@ -58,15 +61,16 @@ var taruProto = {
                     this.vy = tarus[i].vy * restTaru;
                     tarus[i].vx = tempVx * restTaru;
                     tarus[i].vy = tempVy * restTaru;
-                    
-                    // 当たったら上にバウンドさせてみる
-                    if(abs(this.vy) < 0.3 && abs(tarus[i].vy) < 0.3) {
+
+                    // 当たったらちょっと上にバウンドさせてみる
+                    if (abs(this.vy) < 0.3 && abs(tarus[i].vy) < 0.3) {
                         this.vy -= Math.random() * 0.5 + 0.5;
                         tarus[i].vy -= Math.random() * 0.5 + 0.5;
                     }
                 }
             }
         }
+        // タル同士の当たり判定 end
 
         // X座標の更新
         this.px += this.vx;
@@ -81,7 +85,6 @@ var taruProto = {
 
         // Y座標の更新
         this.py += this.vy;
-        var isGrounded = false;
         if (this.py < 0 + taruRadius) {
             this.py = 0 + taruRadius;
             this.vy *= -1;
@@ -92,11 +95,31 @@ var taruProto = {
             isGrounded = true;
         }
 
+        // ステージとの当たり判定 begin
+        if (isKabeNoNaka(this.px, this.py, taruRadius)) { // もっと分解する余地ありそう
+          this.px = parseInt(this.px);
+          this.py = parseInt(this.py);
+          var escapeDistance = getEscapeDistance(this.px, this.py, taruRadius);
+          this.py += escapeDistance;
+          this.vy *= -1;
+          if (escapeDistance <= 0) {
+            isGrounded = true;
+            this.vy *= restFloor;
+          }
+        }
+        // ステージとの当たり判定 end
+
+        // X加速度の更新
+        if (isGrounded) {
+          // 接地面との摩擦のつもり
+          this.vx *= 1.0;
+        }
+
         // Y加速度の更新
         if(!isGrounded) {
-            this.vy += 0.3; // 重力
+            this.vy += gravity; // 重力
 
-            // 加速度制限
+            // 速度制限
             if (this.vy > 8) {
                 this.vy = 8;
             }
@@ -134,7 +157,8 @@ var nextTaru = function() {
         return;
     }
 
-    var taru = makeTaru(Math.random() * 5 + 2, Math.random() * -5 - 2);
+    var taru = makeTaru(Math.random() * 5 + 3, Math.random() * -3 - 2);
+    //var taru = makeTaru(5, -5);
     tarus.push(taru);
 
     previousTaruThrownTime = time;
