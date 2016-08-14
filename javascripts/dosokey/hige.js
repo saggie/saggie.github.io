@@ -5,6 +5,7 @@ const higeSpawnPx = 50,
 
 var higeX = higeSpawnPx,
     higeY = higeSpawnPy,
+    higeVx = 0,
     higeVy = 0,
     isHigeGrounded = false,
     isHigeLaddering = false;
@@ -53,6 +54,8 @@ function tryMoveHige() {
 
   // ハシゴの昇降
   if (flgKeyUp || flgKeyDown) {
+    higeX = parseInt(higeX);
+    higeY = parseInt(higeY);
     if (canHigeGrabTheLadder(higeX, higeY, higeSize)) {
       if (flgKeyUp == true) { higeY--; }
       if (flgKeyDown == true) { higeY++; }
@@ -68,5 +71,9 @@ function tryMoveHige() {
   if (higeX < 0) { higeX = 0; }
   if (higeY < 0) { higeY = 0; }
   if (higeX + higeSize > screenWidth) { higeX = screenWidth - higeSize; }
-  if (higeY + higeSize > screenHeight) { higeY = screenHeight - higeSize; }
+  if (higeY + higeSize > screenHeight) {
+    higeY = screenHeight - higeSize;
+    higeVy = 0;
+    isHigeGrounded = true;
+  }
 }

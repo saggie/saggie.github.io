@@ -91,7 +91,7 @@ var taruProto = {
       this.py += escapeDistance;
       this.vy *= -1;
       if (escapeDistance <= 0) {
-        // 上方向に逃げたら接地と判断する
+        // 上(マイナス)方向に逃げたら接地と判断する
         isGrounded = true;
         this.vy *= restFloor;
       }
@@ -108,13 +108,29 @@ var taruProto = {
 
       if (this.vy > 8) { this.vy = 8; } // 速度制限
     }
-  },
-  toString : function() {
-    return 'id=' + this.id + ', ' +
-           'px=' + this.px + ', ' +
-           'py=' + this.py + ', ' +
-           'vx=' + this.vx + ', ' +
-           'vy=' + this.vy;
+    
+    // ヒゲとの干渉
+    if (isHitRectAndCircle(higeX, higeY, higeSize, higeSize, this.px, this.py, taruRadius)) {
+      
+      // ヒゲを動かす
+      higeX += this.vx;
+      higeY += this.vy;
+      
+      // ヒゲに動かされる
+      this.vx *= -1 * 0.8;
+      this.vy *= -1 * 0.8;
+      
+      var higeCenterX = higeX + higeSize / 2;
+      var higeCenterY = higeY + higeSize / 2;
+      
+      // 座標の更新(お互いを少しずつ離す、少し速度を与えてみる)
+      var dx = distance(this.px, higeCenterX) / 6; // 要調整
+      var dy = distance(this.py, higeCenterY) / 6;
+      if (this.px < higeCenterX) { this.px -= dx; this.vx -= dx * 0.05; higeX += dx; } // タルが左、ヒゲが右のとき
+      else                       { this.px += dx; this.vx += dx * 0.05; higeX -= dx; } // タルが右、ヒゲが左のとき
+      if (this.py < higeCenterY) { this.py -= dy; this.vy -= dy * 0.05; higeY += dy; } // タルが下、ヒゲが上のとき
+      else                       { this.py += dy; this.vy += dy * 0.05; higeY -= dy; } // タルが上、ヒゲが下のとき
+    }
   }
 };
 
