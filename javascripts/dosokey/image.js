@@ -1,7 +1,8 @@
 
 // image load flag
 var bg_ready = false,
-    stage_ready = false;
+    stage_ready = false,
+    hige_ready = false;
 
 // load background image
 var bg_img = new Image();
@@ -20,4 +21,11 @@ stage_img.onload = function() {
   stage_ready = true;
   hidden_context.drawImage(stage_img, 0, 0);
   stage_data = hidden_context.getImageData(0, 0, hidden_canvas.width, hidden_canvas.height);
+}
+
+// load hige images
+var hige_img = new Image();
+hige_img.src = "img/hige.png";
+hige_img.onload = function() {
+  hige_ready = true;
 }

@@ -1,6 +1,6 @@
 
 // タル変数
-const taruSize = 8;
+const taruSize = 10;
 const taruRadius = parseInt(taruSize / 2);
 var tarus = []; // タルリスト
 const taruMax = 255;

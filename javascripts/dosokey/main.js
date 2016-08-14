@@ -4,13 +4,9 @@
 
     var globalTimeFrame = 0;
 
-    var charPosX = parseInt(Math.random() * canvas.width);
-    var charPosY = parseInt(Math.random() * canvas.height);
-    var charSize = 8;
-
     function loop() {
       if (isAllReady) {
-        moveChar();
+        tryMoveHige();
         render();
         nextTaru();
         taruStep();
@@ -20,21 +16,8 @@
 
     function isAllReady() {
         return bg_ready &&
-               stage_ready;
-    }
-
-    function moveChar() {
-        /* move char */
-        if (flgKeyUp == true) { charPosY++; }
-        if (flgKeyDown == true) { charPosY--; }
-        if (flgKeyLeft == true) { charPosX--; }
-        if (flgKeyRight == true) { charPosX++; }
-
-        /* set charPos inside the canvas */
-        if (charPosX < 0) { charPosX = 0; }
-        if (charPosY < 0) { charPosY = 0; }
-        if (charPosX + charSize > screenWidth) { charPosX = screenWidth - charSize; }
-        if (charPosY + charSize > screenHeight) { charPosY = screenHeight - charSize; }
+               stage_ready &&
+               hige_ready;
     }
 
     function revertScale() {
@@ -52,7 +35,8 @@
         context.strokeStyle="#00FFFF";
         context.strokeRect(0, 0, screenWidth, screenHeight);
         context.beginPath();
-        context.strokeRect(charPosX, screenHeight - charPosY - charSize, charSize, charSize);
+
+        context.strokeRect(higeX, higeY, higeSize, higeSize);
 
         for (var i = 0; i < tarus.length; i++) {
             context.beginPath();

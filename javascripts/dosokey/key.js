@@ -1,14 +1,16 @@
+
+/* key code value */
+const KV_A = 65,
+      KV_D = 68,
+      KV_S = 83,
+      KV_W = 87,
+      KV_SPACE = 32;
+
 var flgKeyUp = false,
     flgKeyDown = false,
     flgKeyLeft = false,
     flgKeyRight = false,
-
-    /* key code value */
-    KV_A = 65,
-    KV_D = 68,
-    KV_S = 83,
-    KV_W = 87,
-    KV_SPACE = 32;
+    flgKeySpace = false;
 
 canvas.setAttribute('tabindex', 0);
 canvas.addEventListener('keydown', onKeyDown, false);
@@ -20,6 +22,7 @@ function onKeyDown(e) {
         case KV_S: flgKeyDown = true; break;
         case KV_A: flgKeyLeft = true; break;
         case KV_D: flgKeyRight = true; break;
+        case KV_SPACE: flgKeySpace = true; break;
     }
 }
 
@@ -29,5 +32,6 @@ function onKeyUp(e) {
         case KV_S: flgKeyDown = false; break;
         case KV_A: flgKeyLeft = false; break;
         case KV_D: flgKeyRight = false; break;
+        case KV_SPACE: flgKeySpace = false; break;
     }
 }
