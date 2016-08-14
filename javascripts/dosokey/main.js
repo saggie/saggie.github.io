@@ -8,8 +8,8 @@
       if (isAllReady) {
         tryMoveHige();
         render();
-        nextTaru();
-        taruStep();
+        launchNextTaru();
+        calcAllTaru();
         globalTimeFrame++;
       }
     }
@@ -38,12 +38,12 @@
 
         context.strokeRect(higeX, higeY, higeSize, higeSize);
 
-        for (var i = 0; i < tarus.length; i++) {
+        for (var i = 0; i < taru.length; i++) {
             context.beginPath();
-            context.arc(tarus[i].getPx(), tarus[i].getPy(), taruRadius, 0, Math.PI*2, false);
+            context.arc(taru[i].getPx(), taru[i].getPy(), taruRadius, 0, Math.PI*2, false);
             context.stroke();
 
-            context.fillText(tarus[i].getId(), tarus[i].getPx()-4, tarus[i].getPy()+4);
+            context.fillText(taru[i].getId(), taru[i].getPx()-4, taru[i].getPy()+4);
         }
 
         // debug text

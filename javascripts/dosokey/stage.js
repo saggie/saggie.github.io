@@ -7,7 +7,7 @@ var getGreenAddress = function (x, y) {
   return (x * colorOffset + greenOffset) + (y * stage_data.width * colorOffset);
 }
 
-var isKabeNoNaka = function (x, y, region) {
+var isTaruInTheObject = function (x, y, region) {
   var parsedX = parseInt(x);
   var parsedY = parseInt(y);
   var centerX = parsedX * colorOffset;
@@ -23,25 +23,25 @@ var isKabeNoNaka = function (x, y, region) {
          (stage_data.data[centerX + bottomY] == 255);
 }
 
-var getEscapeDistance = function (x, y, region) {
-    var upperEscapeDistance = getUpperEscapeDistance(x, y, region);
-    var lowerEscapeDistance = getLowerEscapeDistance(x, y, region);
+var getTaruEscapeDistance = function (x, y, region) {
+    var upperDistance = getUpperTaruEscapeDistance(x, y, region);
+    var lowerDistance = getLowerTaruEscapeDistance(x, y, region); // 必要ない
 
-    return (upperEscapeDistance > lowerEscapeDistance) ?  lowerEscapeDistance : -upperEscapeDistance;
+    return (upperDistance > lowerDistance) ?  lowerDistance : -upperDistance;
 }
 
-var getUpperEscapeDistance = function (x, y, region) {
+var getUpperTaruEscapeDistance = function (x, y, region) {
     for (var i = 1; i < stageThickness + taruSize; i++) {
-      if (!isKabeNoNaka(x, y - i, region)) {
+      if (!isTaruInTheObject(x, y - i, region)) {
           return i - 1;
       }
     }
     return stageThickness + taruSize + 1;
 }
 
-var getLowerEscapeDistance = function (x, y, region) {
+var getLowerTaruEscapeDistance = function (x, y, region) {
     for (var i = 1; i < stageThickness + taruSize; i++) {
-      if (!isKabeNoNaka(x, y + i, region)) {
+      if (!isTaruInTheObject(x, y + i, region)) {
           return i + 1;
       }
     }
