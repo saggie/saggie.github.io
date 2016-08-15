@@ -130,6 +130,9 @@ var taruProto = {
       else                       { this.px += dx; this.vx += dx * 0.05; higeX -= dx; } // タルが右、ヒゲが左のとき
       if (this.py < higeCenterY) { this.py -= dy; this.vy -= dy * 0.05; higeY += dy; } // タルが下、ヒゲが上のとき
       else                       { this.py += dy; this.vy += dy * 0.05; higeY -= dy; } // タルが上、ヒゲが下のとき
+      
+      higeX = parseInt(higeX);
+      higeY = parseInt(higeY);
     }
   }
 };
