@@ -20,7 +20,8 @@
   function isAllReady() {
     return bg_ready &&
            stage_ready &&
-           hige_ready;
+           hige_ready &&
+           taru_ready;
   }
 
   function render() {
@@ -52,16 +53,17 @@
       case higeStates["left_jump"]:  drawHige(1, 3); break;
       case higeStates["climb2"]:     drawHige(1, 4); break;
     }
-    context.scale(scale, scale);
-
+    
     // draw Taru
     for (var i = 0; i < taru.length; i++) {
-      context.beginPath();
-      context.arc(taru[i].getPx(), taru[i].getPy(), taruRadius, 0, Math.PI*2, false);
-      context.stroke();
-
-      context.fillText(taru[i].getId(), taru[i].getPx()-4, taru[i].getPy()+4);
+      switch ((globalTimeFrame + taru[i].getId()) % 12) {
+        case 0: case 1: case 2: drawTaru(i, 0); break;
+        case 3: case 4: case 5: drawTaru(i, 1); break;
+        case 6: case 7: case 8: drawTaru(i, 2); break;
+        case 9: case 10: case 11: drawTaru(i, 3); break;
+      }
     }
+    context.scale(scale, scale);
 
     // draw Kong
 
@@ -82,6 +84,12 @@
 
   function drawHige(row, column) {
     context.drawImage(hige_img, column * 32, row * 32, 32, 32, higeX * 2, higeY * 2, 32, 32);
+  }
+
+  function drawTaru(id, column) {
+    context.drawImage(taru_img, column * 24, 0, 24, 24,
+                      (taru[id].getPx() - taruRadius) * scale,
+                      (taru[id].getPy() - taruRadius) * scale, 24, 24);
   }
 
 })();

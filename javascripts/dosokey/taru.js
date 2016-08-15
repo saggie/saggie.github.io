@@ -1,6 +1,6 @@
 
 // タル定数
-const taruSize = 10;
+const taruSize = 11;
 const taruRadius = parseInt(taruSize / 2);
 const numTaruMax = 255;
 const gravity = 0.3;

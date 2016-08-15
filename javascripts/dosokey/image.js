@@ -2,7 +2,8 @@
 // image load flag
 var bg_ready = false,
     stage_ready = false,
-    hige_ready = false;
+    hige_ready = false,
+    taru_ready = false;
 
 // load background image
 var bg_img = new Image();
@@ -28,4 +29,11 @@ var hige_img = new Image();
 hige_img.src = "img/hige.png";
 hige_img.onload = function() {
   hige_ready = true;
+}
+
+// load taru images
+var taru_img = new Image();
+taru_img.src = "img/taru.png";
+taru_img.onload = function() {
+  taru_ready = true;
 }
