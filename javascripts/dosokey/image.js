@@ -3,7 +3,8 @@
 var bg_ready = false,
     stage_ready = false,
     hige_ready = false,
-    taru_ready = false;
+    taru_ready = false,
+    kong_ready = false;
 
 // load background image
 var bg_img = new Image();
@@ -36,4 +37,11 @@ var taru_img = new Image();
 taru_img.src = "img/taru.png";
 taru_img.onload = function() {
   taru_ready = true;
+}
+
+// load kong images
+var kong_img = new Image();
+kong_img.src = "img/kong.png";
+kong_img.onload = function() {
+  kong_ready = true;
 }

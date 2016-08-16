@@ -1,27 +1,31 @@
+
+var globalTimeFrame = 0;
+var kong = new Kong();
+
 (function () {
   var flameRate = 30;
   var sleepTime = parseInt(1000 / flameRate);
 
-  var globalTimeFrame = 0;
-
   setInterval(loop, sleepTime);
 
   function loop() {
-    if (isAllReady) {
+    if (areAllImagesReady) {
       render();
-      launchNextTaru();
+      kong.throwTaru();
       calcAllTaru();
       tryMoveHige();
       updateHigeState();
+      kong.updateState();
       globalTimeFrame++;
     }
   }
 
-  function isAllReady() {
+  function areAllImagesReady() {
     return bg_ready &&
            stage_ready &&
            hige_ready &&
-           taru_ready;
+           taru_ready &&
+           kong_ready;
   }
 
   function render() {
@@ -54,6 +58,16 @@
       case higeStates["climb2"]:     drawHige(1, 4); break;
     }
     
+    // draw Kong
+    switch (kong.getState()) {
+      case kong.getStates("center1"): drawKong(0, 0); break;
+      case kong.getStates("center2"): drawKong(1, 0); break;
+      case kong.getStates("right1"):  drawKong(0, 1); break;
+      case kong.getStates("right2"):  drawKong(1, 1); break;
+      case kong.getStates("left1"):   drawKong(0, 2); break;
+      case kong.getStates("left2"):   drawKong(1, 2); break;
+    }
+    
     // draw Taru
     for (var i = 0; i < taru.length; i++) {
       switch ((globalTimeFrame + taru[i].getId()) % 12) {
@@ -63,9 +77,8 @@
         case 9: case 10: case 11: drawTaru(i, 3); break;
       }
     }
+    
     context.scale(scale, scale);
-
-    // draw Kong
 
     // debug text
     var row = 10;
@@ -84,6 +97,10 @@
 
   function drawHige(row, column) {
     context.drawImage(hige_img, column * 32, row * 32, 32, 32, higeX * 2, higeY * 2, 32, 32);
+  }
+
+  function drawKong(row, column) {
+    context.drawImage(kong_img, column * 96, row * 64, 96, 64, 64, 64, 96, 64);
   }
 
   function drawTaru(id, column) {

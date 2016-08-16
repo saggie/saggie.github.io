@@ -6,8 +6,8 @@ const numTaruMax = 255;
 const gravity = 0.3;
 const restTaru = 0.9; // タル同士の反発係数(restitution)
 const restFloor = 0.5; // 床の反発係数
-const taruSpawnPx = 70;
-const taruSpawnPy = 40;
+const taruSpawnPx = 70 + taruRadius;
+const taruSpawnPy = 56 + taruRadius;
 
 // タル変数
 var taru = []; // タルリスト
@@ -144,25 +144,10 @@ var makeTaru = function (init_vx, init_vy) {
   newTaru.py = taruSpawnPy;
   newTaru.vx = init_vx;
   newTaru.vy = init_vy;
+  
+  taru.push(newTaru);
   return newTaru;
 };
-
-var launchNextTaru = function() {
-
-  if (taru.length >= numTaruMax) { return; }
-
-  var date = new Date();
-  var currentTime = date.getTime();
-  if (currentTime - previousTaruThrownTime < nextTaruThrowingInterval) {
-    return;
-  }
-
-  var newTaru = makeTaru(Math.random() * 5 + 3, Math.random() * -3 - 2);
-  taru.push(newTaru);
-
-  previousTaruThrownTime = currentTime;
-  nextTaruThrowingInterval = Math.random() * 500 + 100;
-}
 
 var calcAllTaru = function () {
   for (var i = 0; i < taru.length; i++) {
