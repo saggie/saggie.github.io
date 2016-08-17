@@ -42,15 +42,14 @@ canvas.addEventListener('touchend', onTouchEnd, false);
 
 function onTouchStart(e) {
 
-  var boundingClientRect = e.target.getBoundingClientRect();
   var touchPx = e.touches[0].pageX - boundingClientRect.left;
   var touchPy = e.touches[0].pageY - boundingClientRect.top;
   e.preventDefault();
 
-  if (screenWidth / 3 * 2 < touchPx) {
+  if (canvas.width / 3 * 2 < touchPx) {
     flgKeyRight = true;
     flgKeyLeft = false;
-  } else if (screenWidth / 3 > touchPx) {
+  } else if (canvas.width / 3 > touchPx) {
     flgKeyRight = false;
     flgKeyLeft = true;
   } else {
@@ -58,10 +57,10 @@ function onTouchStart(e) {
     flgKeyLeft = false;
   }
 
-  if (screenHeight / 3 * 2 < touchPy) {
+  if (canvas.height / 3 * 2 < touchPy) {
     flgKeyUp = false;
     flgKeyDown = true;
-  } else if (screenHeight / 3 > touchPy) {
+  } else if (canvas.height / 3 > touchPy) {
     flgKeyUp = true;
     flgKeyDown = false;
   } else {
