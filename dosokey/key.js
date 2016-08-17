@@ -40,16 +40,25 @@ function onKeyUp(e) {
 canvas.addEventListener('touchstart', onTouchStart, false);
 canvas.addEventListener('touchend', onTouchEnd, false);
 
+var touchPx = 0;
+var touchPy = 0;
+var boundingClientRectLeft = 0;
+var boundingClientRectTop = 0;
+  
 function onTouchStart(e) {
 
-  var touchPx = e.touches[0].pageX - boundingClientRect.left;
-  var touchPy = e.touches[0].pageY - boundingClientRect.top;
+  touchPx = e.touches[0].pageX;
+  touchPy = e.touches[0].pageY;
+  
+  var boundingClientRect = e.target.getBoundingClientRect();
+  boundingClientRectLeft = boundingClientRect.left;
+  boundingClientRectTop = boundingClientRect.top;
   e.preventDefault();
 
-  if (canvas.width / 3 * 2 < touchPx) {
+  if (canvas.width / 4 * 3 < touchPx) {
     flgKeyRight = true;
     flgKeyLeft = false;
-  } else if (canvas.width / 3 > touchPx) {
+  } else if (canvas.width / 4 > touchPx) {
     flgKeyRight = false;
     flgKeyLeft = true;
   } else {
@@ -57,10 +66,10 @@ function onTouchStart(e) {
     flgKeyLeft = false;
   }
 
-  if (canvas.height / 3 * 2 < touchPy) {
+  if (canvas.height / 4 * 3 < touchPy) {
     flgKeyUp = false;
     flgKeyDown = true;
-  } else if (canvas.height / 3 > touchPy) {
+  } else if (canvas.height / 4 > touchPy) {
     flgKeyUp = true;
     flgKeyDown = false;
   } else {

@@ -88,6 +88,10 @@ var hige = new Hige();
     context.fillStyle="#00FFFF";
     context.strokeStyle="#00FFFF";
     context.fillText(globalTimeFrame, 10, row); row += 10;
+    context.fillText(touchPx, 10, row); row += 10;
+    context.fillText(touchPy, 10, row); row += 10;
+    context.fillText(boundingClientRectLeft, 10, row); row += 10;
+    context.fillText(boundingClientRectTop, 10, row); row += 10;
     //if(taru && taru[0]) {
     //  context.fillText(taru[0].getPx(), 10, row); row += 10;
     //  context.fillText(taru[0].getVx(), 10, row); row += 10;
