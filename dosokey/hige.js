@@ -59,8 +59,6 @@ function updateHigeState() {
 
 function tryMoveHige() {
 
-  // タルから受ける外力はタル側で計算
-
   // 整数化しておく
   higeX = parseInt(higeX);
   higeY = parseInt(higeY);
@@ -83,30 +81,27 @@ function tryMoveHige() {
   }
 
   // ジャンプ
-  if (flgKeySpace && isHigeGrounded) {
+  if (flgKeySpace && isHigeGrounded && !isHigeLaddering) {
     higeVy -= 2;
-
-    higeY -= 2;//test
+    higeY -= 1;
   }
 
-  // Y座標の更新
-  higeY += higeVy;
-
-  // Y速度更新(重力)
+  // Y座標・Y速度の更新
   if (!isHigeGrounded && !isHigeLaddering) {
-    higeVy  += gravity;
+    higeY += higeVy;
+    higeVy += gravity; // 重力
 
-    if (this.vy > 8) { this.vy = 8; } // 速度制限
+    if (this.vy > 8) { this.vy = 8; } // 落下速度を制限
   }
 
   // ハシゴの昇降
-  if (flgKeyUp || flgKeyDown) {
+  if ((flgKeyUp || flgKeyDown) && (isHigeGrounded || isHigeLaddering)) {
     higeX = parseInt(higeX);
     higeY = parseInt(higeY);
     if (canHigeGrabTheLadder(higeX, higeY, higeSize)) {
-      if (flgKeyUp == true) { higeY--; higeMovingCount++; }
-      if (flgKeyDown == true) { higeY++; higeMovingCount++; }
       isHigeLaddering = true;
+      if (flgKeyUp)   { higeY--; higeMovingCount++; }
+      if (flgKeyDown) { higeY++; higeMovingCount++; }
     }
   }
 

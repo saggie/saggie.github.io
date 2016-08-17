@@ -2,7 +2,7 @@
 // タル定数
 const taruSize = 11;
 const taruRadius = parseInt(taruSize / 2);
-const numTaruMax = 255;
+const numTaruMax = 3;
 const gravity = 0.3;
 const restTaru = 0.9; // タル同士の反発係数(restitution)
 const restFloor = 0.5; // 床の反発係数
