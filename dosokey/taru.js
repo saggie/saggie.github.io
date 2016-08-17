@@ -2,7 +2,7 @@
 // タル定数
 const taruSize = 11;
 const taruRadius = parseInt(taruSize / 2);
-const numTaruMax = 3;
+const numTaruMax = 256;
 const gravity = 0.3;
 const restTaru = 0.9; // タル同士の反発係数(restitution)
 const restFloor = 0.5; // 床の反発係数
@@ -110,29 +110,27 @@ var taruProto = {
     }
     
     // ヒゲとの干渉
-    if (isHitRectAndCircle(higeX, higeY, higeSize, higeSize, this.px, this.py, taruRadius)) {
-      
+    if (isHitRectAndCircle(hige.getPx(), hige.getPy(),
+                           hige.getSize(), hige.getSize(),
+                           this.px, this.py, taruRadius)) {
       // ヒゲを動かす
-      higeX += this.vx;
-      higeY += this.vy;
+      hige.addPx(this.vx);
+      hige.addPy(this.vy);
       
       // ヒゲに動かされる
       this.vx *= -1 * 0.8;
       this.vy *= -1 * 0.8;
       
-      var higeCenterX = higeX + higeSize / 2;
-      var higeCenterY = higeY + higeSize / 2;
+      var higeCenterX = hige.getPx() + hige.getSize() / 2;
+      var higeCenterY = hige.getPy() + hige.getSize() / 2;
       
       // 座標の更新(お互いを少しずつ離す、少し速度を与えてみる)
       var dx = distance(this.px, higeCenterX) / 6; // 要調整
       var dy = distance(this.py, higeCenterY) / 6;
-      if (this.px < higeCenterX) { this.px -= dx; this.vx -= dx * 0.05; higeX += dx; } // タルが左、ヒゲが右のとき
-      else                       { this.px += dx; this.vx += dx * 0.05; higeX -= dx; } // タルが右、ヒゲが左のとき
-      if (this.py < higeCenterY) { this.py -= dy; this.vy -= dy * 0.05; higeY += dy; } // タルが下、ヒゲが上のとき
-      else                       { this.py += dy; this.vy += dy * 0.05; higeY -= dy; } // タルが上、ヒゲが下のとき
-      
-      higeX = parseInt(higeX);
-      higeY = parseInt(higeY);
+      if (this.px < higeCenterX) { this.px -= dx; this.vx -= dx * 0.05; hige.addPx(+dx); } // タルが左、ヒゲが右のとき
+      else                       { this.px += dx; this.vx += dx * 0.05; hige.addPx(-dx); } // タルが右、ヒゲが左のとき
+      if (this.py < higeCenterY) { this.py -= dy; this.vy -= dy * 0.05; hige.addPy(+dy); } // タルが下、ヒゲが上のとき
+      else                       { this.py += dy; this.vy += dy * 0.05; hige.addPy(-dy); } // タルが上、ヒゲが下のとき
     }
   }
 };

@@ -2,6 +2,7 @@
 var globalTimeFrame = 0;
 var images = new Images();
 var kong = new Kong();
+var hige = new Hige();
 
 (function () {
   var flameRate = 30;
@@ -10,10 +11,10 @@ var kong = new Kong();
   function loop() {
     if (images.areAllImagesReady()) {
       kong.throwTaru();
-      calcAllTaru();
-      tryMoveHige();
-      updateHigeState();
       kong.updateState();
+      calcAllTaru();
+      hige.tryMove();
+      hige.updateState();
       render();
       globalTimeFrame++;
     }
@@ -28,7 +29,7 @@ var kong = new Kong();
   }
 
   function drawHige(row, column) {
-    context.drawImage(hige_img, column * 32, row * 32, 32, 32, higeX * 2, higeY * 2, 32, 32);
+    context.drawImage(hige_img, column * 32, row * 32, 32, 32, hige.getPx()*2, hige.getPy()*2, 32, 32);
   }
 
   function drawTaru(id, column) {
@@ -57,17 +58,17 @@ var kong = new Kong();
     }
     
     // draw Hige
-    switch (higeState) {
-      case higeStates["right_stand"]: drawHige(0, 0); break;
-      case higeStates["right_walk1"]: drawHige(0, 1); break;
-      case higeStates["right_walk2"]: drawHige(0, 2); break;
-      case higeStates["right_jump"]:  drawHige(0, 3); break;
-      case higeStates["climb1"]:      drawHige(0, 4); break;
-      case higeStates["left_stand"]: drawHige(1, 0); break;
-      case higeStates["left_walk1"]: drawHige(1, 1); break;
-      case higeStates["left_walk2"]: drawHige(1, 2); break;
-      case higeStates["left_jump"]:  drawHige(1, 3); break;
-      case higeStates["climb2"]:     drawHige(1, 4); break;
+    switch (hige.getState()) {
+      case hige.getStates("right_stand"): drawHige(0, 0); break;
+      case hige.getStates("right_walk1"): drawHige(0, 1); break;
+      case hige.getStates("right_walk2"): drawHige(0, 2); break;
+      case hige.getStates("right_jump"):  drawHige(0, 3); break;
+      case hige.getStates("climb1"):      drawHige(0, 4); break;
+      case hige.getStates("left_stand"): drawHige(1, 0); break;
+      case hige.getStates("left_walk1"): drawHige(1, 1); break;
+      case hige.getStates("left_walk2"): drawHige(1, 2); break;
+      case hige.getStates("left_jump"):  drawHige(1, 3); break;
+      case hige.getStates("climb2"):     drawHige(1, 4); break;
     }
     
     // draw Taru
