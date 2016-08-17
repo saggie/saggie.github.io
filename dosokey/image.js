@@ -16,7 +16,7 @@ var Images = function() {
       taru_img_ready = false,
       kong_img_ready = false;
 
-  bg_img.src = "img/bgx2.png";
+  bg_img.src = "img/bg.png";
   hige_img.src = "img/hige.png";
   taru_img.src = "img/taru.png";
   kong_img.src = "img/kong.png";

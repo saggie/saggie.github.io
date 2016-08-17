@@ -43,8 +43,8 @@ var Kong = function() {
     } else {
       if (globalTimeFrame % 30 == 0) { drummingCount++; }
       if (drummingCount % 6 == 0 || drummingCount % 6 == 1) { state = states["center2"]; return; }
-      if (drummingCount % 6 == 2 || drummingCount % 6 == 4) { state = states["left2"]; return; }
-      if (drummingCount % 6 == 3 || drummingCount % 6 == 5) { state = states["right2"]; return; }
+      if (drummingCount % 6 == 2 || drummingCount % 6 == 4) { state = states["right2"]; return; }
+      if (drummingCount % 6 == 3 || drummingCount % 6 == 5) { state = states["left2"]; return; }
     }
   };
   
