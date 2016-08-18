@@ -43,21 +43,21 @@ var Stage = function() {
   };
 
   function getUpperTaruEscapeDistance (x, y, region) {
-      for (var i = 1; i < stageThickness + taruSize; i++) {
+      for (var i = 1; i < stageThickness + taruManager.getSize(); i++) {
         if (!self.isTaruInTheObject(x, y - i, region)) {
             return i - 1;
         }
       }
-      return stageThickness + taruSize + 1;
+      return stageThickness + taruManager.getSize() + 1;
   }
 
   function getLowerTaruEscapeDistance (x, y, region) {
-      for (var i = 1; i < stageThickness + taruSize; i++) {
+      for (var i = 1; i < stageThickness + taruManager.getSize(); i++) {
         if (!self.isTaruInTheObject(x, y + i, region)) {
             return i + 1;
         }
       }
-      return stageThickness + taruSize + 1;
+      return stageThickness + taruManager.getSize() + 1;
   }
 
   this.isHigeInTheObject = function (x, y, size) {

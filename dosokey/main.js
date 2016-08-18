@@ -1,9 +1,10 @@
 
 var globalTimeFrame = 0,
-    images = new Images(),
-    kong = new Kong(),
-    hige = new Hige(),
-    stage = new Stage();
+    images          = new Images(),
+    kong            = new Kong(),
+    taruManager     = new TaruManager(),
+    hige            = new Hige(),
+    stage           = new Stage();
 
 (function () {
   var flameRate = 30;
@@ -13,7 +14,7 @@ var globalTimeFrame = 0,
     if (images.areAllImagesReady() && !hige.isCleared()) {
       kong.throwTaru();
       kong.updateState();
-      calcAllTaru();
+      taruManager.calcAll();
       hige.tryMove();
       hige.updateState();
       render();
@@ -39,8 +40,8 @@ var globalTimeFrame = 0,
 
   function drawTaru(id, column) {
     context.drawImage(taru_img, column * 24, 0, 24, 24,
-                      (taru[id].getPx() - taruRadius) * scale,
-                      (taru[id].getPy() - taruRadius) * scale, 24, 24);
+                      (taru[id].getPx() - taruManager.getRadius()) * scale,
+                      (taru[id].getPy() - taruManager.getRadius()) * scale, 24, 24);
   }
 
   function drawNowLoadingLabel() {
@@ -109,13 +110,6 @@ var globalTimeFrame = 0,
     context.fillText(globalTimeFrame, 10, row); row += 10;
     context.fillText(touchPx, 10, row); row += 10;
     context.fillText(touchPy, 10, row); row += 10;
-  
-    //if(taru && taru[0]) {
-    //  context.fillText(taru[0].getPx(), 10, row); row += 10;
-    //  context.fillText(taru[0].getVx(), 10, row); row += 10;
-    //  context.fillText(taru[0].getPy(), 10, row); row += 10;
-    //  context.fillText(taru[0].getVy(), 10, row); row += 10;
-    //}
   }
 
   var interval = setInterval(loop, sleepTime);

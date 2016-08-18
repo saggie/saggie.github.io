@@ -11,15 +11,15 @@ var distance = function (val1, val2) {
     return abs(val1 - val2);
 }
 
-var isHit = function (x0, y0, x1, y1, distance) {
+var isHitAmongCircles = function (x0, y0, x1, y1, distance) {
     var dist1 = square(x1 - x0) + square(y1 - y0);
     var dist2 = square(distance);
     return dist1 < dist2;
 }
 
-var isHitRectAndCircle = function(rectPx, rectPy, rectWidth, rectHeight,
-                                  circlePx, circlePy, circleRadius) {
-  // rename
+var isHitAmongRectangleAndCircle = function(rectPx, rectPy, rectWidth, rectHeight,
+                                            circlePx, circlePy, circleRadius) {
+  // alias
   var rx1 = rectPx;
   var ry1 = rectPy;
   var rx2 = rectPx + rectWidth;
@@ -38,10 +38,10 @@ var isHitRectAndCircle = function(rectPx, rectPy, rectWidth, rectHeight,
     return true;
   }
 
-  if (isHit(rx1, ry1, cx, cy, r)) { return true; } // check upper-left edge
-  if (isHit(rx2, ry1, cx, cy, r)) { return true; } // check upper-right edge
-  if (isHit(rx1, ry2, cx, cy, r)) { return true; } // check lower-left edge
-  if (isHit(rx2, ry2, cx, cy, r)) { return true; } // check lower-right edge
+  if (isHitAmongCircles(rx1, ry1, cx, cy, r)) { return true; } // check upper-left edge
+  if (isHitAmongCircles(rx2, ry1, cx, cy, r)) { return true; } // check upper-right edge
+  if (isHitAmongCircles(rx1, ry2, cx, cy, r)) { return true; } // check lower-left edge
+  if (isHitAmongCircles(rx2, ry2, cx, cy, r)) { return true; } // check lower-right edge
   
   return false;
 }
