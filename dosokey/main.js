@@ -12,7 +12,7 @@ var globalTimeFrame = 0,
       sleepTime = parseInt(1000 / flameRate);
 
   function loop() {
-    if (images.areAllImagesReady() && !hige.isCleared()) {
+    if (images.areAllImagesReady()) {
       kong.throwTaru();
       kong.updateState();
       taruManager.calcAll();
@@ -26,41 +26,35 @@ var globalTimeFrame = 0,
       drawNowLoadingLabel();
     }
   }
-  
-  function revertScale() {
-    context.scale(1 / scale, 1 / scale);
-  }
 
   function drawKong(row, column) {
     context.drawImage(kong_img, column * 96, row * 64, 96, 64, 64, 48, 96, 64);
   }
 
   function drawHige(row, column) {
-    context.drawImage(hige_img, column * 32, row * 32, 32, 32, hige.getPx()*2, hige.getPy()*2, 32, 32);
+    context.drawImage(hige_img, column * 32, row * 32, 32, 32,
+                      hige.getPx()*scale, hige.getPy()*scale, 32, 32);
   }
 
   function drawTaru(id, column) {
     context.drawImage(taru_img, column * 24, 0, 24, 24,
-                      (taru[id].getPx() - taruManager.getRadius()) * scale,
-                      (taru[id].getPy() - taruManager.getRadius()) * scale, 24, 24);
+                      (taru[id].getPx() - taruManager.getRadius())*scale,
+                      (taru[id].getPy() - taruManager.getRadius())*scale, 24, 24);
   }
 
   function drawNowLoadingLabel() {
-    revertScale();
     context.fillStyle="#000000";
     context.fillRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(load_img, 0, 0, 208, 48, 144, 208, 208, 48);
-    context.scale(scale, scale);
+    context.drawImage(loading_img, 0, 0, 208, 48, 144, 208, 208, 48);
   }
 
   function drawGameClearLabel() {
-    context.drawImage(clear_img, 0, 0, 208, 48, 144, 240, 208, 48);
+    context.drawImage(clear_img, 0, 0, 208, 48, 144, 208, 208, 48);
   }
 
   function render() {
 
     // draw background
-    revertScale();
     context.drawImage(bg_img, 0, 0);
 
     // draw Kong
@@ -101,8 +95,6 @@ var globalTimeFrame = 0,
     if (hige.isCleared()) {
       drawGameClearLabel();
     }
-    
-    context.scale(scale, scale);
 
     // debug text
     var row = 10;
