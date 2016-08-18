@@ -12,7 +12,8 @@ var Hige = function () {
       isGrounded = false,
       isLaddering = false,
       isFacingRight = true,
-      isAtBottom = false;
+      isAtBottom = false,
+      isCleared = false;
 
   var states = {
     right_stand: 0,
@@ -36,6 +37,8 @@ var Hige = function () {
 
   this.addPx = function (val) { px += val; };
   this.addPy = function (val) { py += val; };
+
+  this.isCleared = function () { return isCleared; }
 
   this.updateState = function () {
 
@@ -123,6 +126,11 @@ var Hige = function () {
       vy = 0;
       isAtBottom = true;
     } else { isAtBottom = false; }
+    
+    // クリア判定
+    if (isHigeInTheClearArea(px, py, size) && isGrounded && !isLaddering) {
+      isCleared = true;
+    }
   };
 
 };

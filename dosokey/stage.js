@@ -1,10 +1,15 @@
 
-const colorOffset = 4,        // R[i+0], G[i+1], B[1+2], A[i+3], ...
-      greenOffset = 1;
-const stageThickness = 8;     // 障害物オブジェクトの厚さ
+var colorOffset = 4,    // R[i+0], G[i+1], B[1+2], A[i+3], ...
+    greenOffset = 1,
+    blueOffset = 2,
+    stageThickness = 8; // 障害物オブジェクトの厚さ
 
 var getGreenAddress = function (x, y) {
   return (x * colorOffset + greenOffset) + (y * stage_data.width * colorOffset);
+}
+
+var getBlueAddress = function (x, y) {
+  return (x * colorOffset + blueOffset) + (y * stage_data.width * colorOffset);
 }
 
 var isTaruInTheObject = function (x, y, region) {
@@ -67,12 +72,12 @@ var getHigeEscapeDistance = function (x, y, size) {
 }
 
 var isThereGreenPixelWithinUpperAndLower3pixels = function (x, y) {
-  var greenAddress1 = getGreenAddress(x, y);
-  var greenAddress2 = getGreenAddress(x, y - 1);
-  var greenAddress3 = getGreenAddress(x, y + 1);
-  if (stage_data.data[greenAddress1] == 255 ||
-      stage_data.data[greenAddress2] == 255 ||
-      stage_data.data[greenAddress3] == 255) {
+  var address1 = getGreenAddress(x, y);
+  var address2 = getGreenAddress(x, y - 1);
+  var address3 = getGreenAddress(x, y + 1);
+  if (stage_data.data[address1] == 255 ||
+      stage_data.data[address2] == 255 ||
+      stage_data.data[address3] == 255) {
     return true;
   }
   return false;
@@ -97,3 +102,16 @@ var canHigeGrabTheLadder = function (x, y, size) {
 var isHigeAwayFromTheLadder = function (x, y, size) {
   return canHigeGrabTheLadder(x, y, size) ? false : true;
 }
+
+var isHigeInTheClearArea = function (x, y, size) {
+  var address1 = getBlueAddress(x, y);
+  var address2 = getBlueAddress(x, y + size);
+  var address3 = getBlueAddress(x + size, y);
+  var address4 = getBlueAddress(x + size, y + size);
+
+  return (stage_data.data[address1] == 255) ||
+         (stage_data.data[address2] == 255) ||
+         (stage_data.data[address3] == 255) ||
+         (stage_data.data[address4] == 255);
+}
+
