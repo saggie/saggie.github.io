@@ -42,17 +42,11 @@ canvas.addEventListener('touchend', onTouchEnd, false);
 
 var touchPx = 0;
 var touchPy = 0;
-var boundingClientRectLeft = 0;
-var boundingClientRectTop = 0;
   
 function onTouchStart(e) {
 
-  touchPx = e.touches[0].pageX;
-  touchPy = e.touches[0].pageY;
-  
-  var boundingClientRect = e.target.getBoundingClientRect();
-  boundingClientRectLeft = boundingClientRect.left;
-  boundingClientRectTop = boundingClientRect.top;
+  touchPx = e.touches[0].clientX;
+  touchPy = e.touches[0].clientY;
   e.preventDefault();
 
   if (canvas.width / 4 * 3 < touchPx) {

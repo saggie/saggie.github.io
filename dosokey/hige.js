@@ -11,7 +11,8 @@ var Hige = function () {
       movingCount = 0,
       isGrounded = false,
       isLaddering = false,
-      isFacingRight = true;
+      isFacingRight = true,
+      isAtBottom = false;
 
   var states = {
     right_stand: 0,
@@ -75,7 +76,7 @@ var Hige = function () {
     }
 
     // ステージとの当たり判定
-    if (!isLaddering && isHigeInTheObject(px, py, size)) {
+    if (!isLaddering && isHigeInTheObject(px, py, size) || isAtBottom) {
       var escapeDistance = getHigeEscapeDistance(px, py, size);
       py -= escapeDistance;
       isGrounded = true;
@@ -102,7 +103,7 @@ var Hige = function () {
     if ((flgKeyUp || flgKeyDown) && (isGrounded || isLaddering)) {
       px = parseInt(px);
       py = parseInt(py);
-      if (canHigeGrabTheLadder(px, py, size)) {
+      if (canHigeGrabTheLadder(px, py, size) || isAtBottom) {
         isLaddering = true;
         if (flgKeyUp)   { py--; movingCount++; }
         if (flgKeyDown) { py++; movingCount++; }
@@ -118,10 +119,10 @@ var Hige = function () {
     if (py < 0) { py = 0; }
     if (px + size > screenWidth) { px = screenWidth - size; }
     if (py + size > screenHeight) {
-      py = screenHeight - size;
+      py = screenHeight - size + 1;
       vy = 0;
-      isGrounded = true;
-    }
+      isAtBottom = true;
+    } else { isAtBottom = false; }
   };
 
 };
