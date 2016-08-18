@@ -73,14 +73,14 @@ var Hige = function () {
     py = parseInt(py);
 
     // ハシゴ昇降の継続判定
-    if (isLaddering && isHigeAwayFromTheLadder(px, py, size)) {
+    if (isLaddering && stage.isHigeAwayFromTheLadder(px, py, size)) {
       // 前回ハシゴを昇降していたけど、今はハシゴから離れている
       isLaddering = false;
     }
 
     // ステージとの当たり判定
-    if (!isLaddering && isHigeInTheObject(px, py, size) || isAtBottom) {
-      var escapeDistance = getHigeEscapeDistance(px, py, size);
+    if (!isLaddering && stage.isHigeInTheObject(px, py, size) || isAtBottom) {
+      var escapeDistance = stage.getHigeEscapeDistance(px, py, size);
       py -= escapeDistance;
       isGrounded = true;
       vy = 0;
@@ -106,7 +106,7 @@ var Hige = function () {
     if ((flgKeyUp || flgKeyDown) && (isGrounded || isLaddering)) {
       px = parseInt(px);
       py = parseInt(py);
-      if (canHigeGrabTheLadder(px, py, size) || isAtBottom) {
+      if (stage.canHigeGrabTheLadder(px, py, size) || isAtBottom) {
         isLaddering = true;
         if (flgKeyUp)   { py--; movingCount++; }
         if (flgKeyDown) { py++; movingCount++; }
@@ -128,7 +128,7 @@ var Hige = function () {
     } else { isAtBottom = false; }
     
     // クリア判定
-    if (isHigeInTheClearArea(px, py, size) && isGrounded && !isLaddering) {
+    if (stage.isHigeAtTheGoalArea(px, py, size) && isGrounded && !isLaddering) {
       isCleared = true;
     }
   };

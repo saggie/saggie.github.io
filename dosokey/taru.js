@@ -84,10 +84,10 @@ var taruProto = {
     }
 
     // ステージ障害物との当たり判定
-    if (isTaruInTheObject(this.px, this.py, taruRadius)) { // TODO 改良の余地あり
+    if (stage.isTaruInTheObject(this.px, this.py, taruRadius)) { // TODO 改良の余地あり
       this.px = parseInt(this.px);
       this.py = parseInt(this.py);
-      var escapeDistance = getTaruEscapeDistance(this.px, this.py, taruRadius);
+      var escapeDistance = stage.getTaruEscapeDistance(this.px, this.py, taruRadius);
       this.py += escapeDistance;
       this.vy *= -1;
       if (escapeDistance <= 0) {
