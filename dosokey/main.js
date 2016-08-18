@@ -27,7 +27,7 @@ var hige = new Hige();
   }
 
   function drawKong(row, column) {
-    context.drawImage(kong_img, column * 96, row * 64, 96, 64, 64, 64, 96, 64);
+    context.drawImage(kong_img, column * 96, row * 64, 96, 64, 64, 48, 96, 64);
   }
 
   function drawHige(row, column) {
@@ -41,7 +41,7 @@ var hige = new Hige();
   }
 
   function drawGameClearLabel() {
-    context.drawImage(clear_img, 0, 0, 192, 48, 160, 256, 192, 48);
+    context.drawImage(clear_img, 0, 0, 192, 48, 160, 240, 192, 48);
   }
 
   function render() {
