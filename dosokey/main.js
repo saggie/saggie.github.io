@@ -1,8 +1,9 @@
 
-var globalTimeFrame = 0;
-var images = new Images();
-var kong = new Kong();
-var hige = new Hige();
+var globalTimeFrame = 0,
+    images = new Images(),
+    kong = new Kong(),
+    hige = new Hige(),
+    stage = new Stage();
 
 (function () {
   var flameRate = 30;
@@ -19,6 +20,8 @@ var hige = new Hige();
 
       if (hige.isCleared()) { clearInterval(interval) }
       globalTimeFrame++;
+    } else {
+      drawNowLoadingLabel();
     }
   }
   
@@ -40,14 +43,19 @@ var hige = new Hige();
                       (taru[id].getPy() - taruRadius) * scale, 24, 24);
   }
 
+  function drawNowLoadingLabel() {
+    revertScale();
+    context.fillStyle="#000000";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(load_img, 0, 0, 208, 48, 144, 208, 208, 48);
+    context.scale(scale, scale);
+  }
+
   function drawGameClearLabel() {
-    context.drawImage(clear_img, 0, 0, 192, 48, 160, 240, 192, 48);
+    context.drawImage(clear_img, 0, 0, 208, 48, 144, 240, 208, 48);
   }
 
   function render() {
-
-    // clear screen
-    context.clearRect(0, 0, screenWidth, screenHeight);
 
     // draw background
     revertScale();
@@ -86,7 +94,8 @@ var hige = new Hige();
         case 9: case 10: case 11: drawTaru(i, 3); break;
       }
     }
-    
+
+    // draw clear label
     if (hige.isCleared()) {
       drawGameClearLabel();
     }

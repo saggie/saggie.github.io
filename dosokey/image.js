@@ -1,6 +1,7 @@
 
 // image data
-var bg_img = new Image(),
+var load_img = new Image(),
+    bg_img = new Image(),
     hige_img = new Image(),
     taru_img = new Image(),
     kong_img = new Image(),
@@ -11,13 +12,15 @@ var bg_img = new Image(),
 var Images = function() {
 
   // image loading completion flag
-  var bg_img_ready = false,
+  var load_img_ready = false,
+      bg_img_ready = false,
       hige_img_ready = false,
       taru_img_ready = false,
       kong_img_ready = false,
       clear_img_ready = false,
       stage_img_ready = false;
 
+  load_img.src = "img/load.png";
   bg_img.src = "img/bg.png";
   hige_img.src = "img/hige.png";
   taru_img.src = "img/taru.png";
@@ -25,6 +28,7 @@ var Images = function() {
   clear_img.src = "img/clear.png";
   stage_img.src = "img/stagemask.png";
 
+  load_img.onload = function() { load_img_ready = true; };
   bg_img.onload = function() { bg_img_ready = true; };
   hige_img.onload = function() { hige_img_ready = true; };
   taru_img.onload = function() { taru_img_ready = true; };
@@ -41,7 +45,8 @@ var Images = function() {
   };
 
   this.areAllImagesReady = function () {
-    return bg_img_ready &&
+    return load_img_ready &&
+           bg_img_ready &&
            hige_img_ready &&
            taru_img_ready &&
            kong_img_ready &&
