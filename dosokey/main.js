@@ -9,13 +9,15 @@ var hige = new Hige();
   var sleepTime = parseInt(1000 / flameRate);
 
   function loop() {
-    if (images.areAllImagesReady()) {
+    if (images.areAllImagesReady() && !hige.isCleared()) {
       kong.throwTaru();
       kong.updateState();
       calcAllTaru();
       hige.tryMove();
       hige.updateState();
       render();
+
+      if (hige.isCleared()) { clearInterval(interval) }
       globalTimeFrame++;
     }
   }
@@ -36,6 +38,9 @@ var hige = new Hige();
     context.drawImage(taru_img, column * 24, 0, 24, 24,
                       (taru[id].getPx() - taruRadius) * scale,
                       (taru[id].getPy() - taruRadius) * scale, 24, 24);
+  }
+
+    context.drawImage(clear_img, 0, 0, 192, 48, 160, 256, 192, 48);
   }
 
   function render() {
@@ -81,6 +86,9 @@ var hige = new Hige();
       }
     }
     
+    if (hige.isCleared()) {
+    }
+    
     context.scale(scale, scale);
 
     // debug text
@@ -99,6 +107,6 @@ var hige = new Hige();
     //}
   }
 
-  setInterval(loop, sleepTime);
+  var interval = setInterval(loop, sleepTime);
 
 })();
