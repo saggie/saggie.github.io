@@ -1,6 +1,6 @@
 
 // image data
-var load_img = new Image(),
+var loading_img = new Image(),
     bg_img = new Image(),
     hige_img = new Image(),
     taru_img = new Image(),
@@ -12,7 +12,7 @@ var load_img = new Image(),
 var Images = function() {
 
   // Image のロード完了フラグ
-  var load_img_ready = false,
+  var loading_img_ready = false,
       bg_img_ready = false,
       hige_img_ready = false,
       taru_img_ready = false,
@@ -20,7 +20,7 @@ var Images = function() {
       clear_img_ready = false,
       stage_img_ready = false;
 
-  load_img.src = "img/load.png";
+  loading_img.src = "img/loading.png";
   bg_img.src = "img/bg.png";
   hige_img.src = "img/hige.png";
   taru_img.src = "img/taru.png";
@@ -28,7 +28,7 @@ var Images = function() {
   clear_img.src = "img/clear.png";
   stage_img.src = "img/stagemask.png";
 
-  load_img.onload = function() { load_img_ready = true; };
+  loading_img.onload = function() { loading_img_ready = true; };
   bg_img.onload = function() { bg_img_ready = true; };
   hige_img.onload = function() { hige_img_ready = true; };
   taru_img.onload = function() { taru_img_ready = true; };
@@ -45,7 +45,7 @@ var Images = function() {
   };
 
   this.areAllImagesReady = function () {
-    return load_img_ready &&
+    return loading_img_ready &&
            bg_img_ready &&
            hige_img_ready &&
            taru_img_ready &&
