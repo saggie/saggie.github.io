@@ -7,8 +7,9 @@ var globalTimeFrame = 0,
     stage           = new Stage();
 
 (function () {
-  var flameRate = 30;
-  var sleepTime = parseInt(1000 / flameRate);
+
+  var flameRate = 30,
+      sleepTime = parseInt(1000 / flameRate);
 
   function loop() {
     if (images.areAllImagesReady() && !hige.isCleared()) {

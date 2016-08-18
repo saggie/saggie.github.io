@@ -34,11 +34,10 @@ var Hige = function () {
   this.getSize = function () { return size; }
   this.getState = function () { return state; };
   this.getStates = function (key) { return states[key]; };
+  this.isCleared = function () { return isCleared; }
 
   this.addPx = function (val) { px += val; };
   this.addPy = function (val) { py += val; };
-
-  this.isCleared = function () { return isCleared; }
 
   this.updateState = function () {
 

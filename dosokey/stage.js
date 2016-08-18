@@ -3,10 +3,10 @@ var Stage = function() {
 
   var self = this;
 
-  var colorOffset = 4,    // R[i+0], G[i+1], B[1+2], A[i+3], ...
-      redOffset = 0,
-      greenOffset = 1,
-      blueOffset = 2,
+  var colorOffset    = 4, // R[i+0], G[i+1], B[1+2], A[i+3], ...
+      redOffset      = 0,
+      greenOffset    = 1,
+      blueOffset     = 2,
       stageThickness = 8; // 障害物オブジェクトの厚さ
 
   function getRedAddress (x, y) {
