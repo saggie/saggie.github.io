@@ -11,7 +11,7 @@ var load_img = new Image(),
   
 var Images = function() {
 
-  // image loading completion flag
+  // Image のロード完了フラグ
   var load_img_ready = false,
       bg_img_ready = false,
       hige_img_ready = false,
@@ -35,7 +35,7 @@ var Images = function() {
   kong_img.onload = function() { kong_img_ready = true; };
   clear_img.onload = function() { clear_img_ready = true; };
 
-  // load stage data
+  // ステージデータを作成
   var hidden_canvas  = document.getElementById('hidden');
   var hidden_context = hidden_canvas.getContext('2d');
   stage_img.onload = function() {
