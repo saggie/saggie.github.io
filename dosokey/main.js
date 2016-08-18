@@ -40,6 +40,7 @@ var hige = new Hige();
                       (taru[id].getPy() - taruRadius) * scale, 24, 24);
   }
 
+  function drawGameClearLabel() {
     context.drawImage(clear_img, 0, 0, 192, 48, 160, 256, 192, 48);
   }
 
@@ -87,6 +88,7 @@ var hige = new Hige();
     }
     
     if (hige.isCleared()) {
+      drawGameClearLabel();
     }
     
     context.scale(scale, scale);

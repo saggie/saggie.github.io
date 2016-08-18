@@ -25,6 +25,7 @@ var Images = function() {
   clear_img.src = "img/clear.png";
   stage_img.src = "img/stagemask.png";
 
+  bg_img.onload = function() { bg_img_ready = true; };
   hige_img.onload = function() { hige_img_ready = true; };
   taru_img.onload = function() { taru_img_ready = true; };
   kong_img.onload = function() { kong_img_ready = true; };
