@@ -2,7 +2,7 @@
 var Hige = function () {
 
   var spawnPx = 50,
-      spawnPy = 200,
+      spawnPy = 192,
       size = 16,
       px = spawnPx,
       py = spawnPy,

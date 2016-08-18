@@ -7,7 +7,7 @@ const gravity = 0.3;
 const restTaru = 0.9; // タル同士の反発係数(restitution)
 const restFloor = 0.5; // 床の反発係数
 const taruSpawnPx = 70 + taruRadius;
-const taruSpawnPy = 56 + taruRadius;
+const taruSpawnPy = 48 + taruRadius;
 
 // タル変数
 var taru = []; // タルリスト
