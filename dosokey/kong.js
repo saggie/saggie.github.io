@@ -23,7 +23,7 @@ var Kong = function() {
   };
   
   var isTaruThrowingFinished = function () {
-    return taru.length >= numTaruMax;
+    return taru.length >= taruManager.getMaxNumber();
   };
   
   this.updateState = function () {
@@ -56,7 +56,7 @@ var Kong = function() {
       return;
     }
 
-    var newTaru = makeTaru(Math.random() * 5 + 3, Math.random() * -3 - 2);
+    var newTaru = taruManager.generateTaru(Math.random() * 5 + 3, Math.random() * -3 - 2);
 
     previousTaruThrownTimeFrame = globalTimeFrame;
     nextTaruThrowingInterval = parseInt(Math.random() * 18) + 3;
