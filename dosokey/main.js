@@ -37,9 +37,9 @@ var globalTimeFrame = 0,
   }
 
   function drawTaru(id, column) {
-    context.drawImage(taru_img, column * 24, 0, 24, 24,
+    context.drawImage(taru_img, column * 24, 0, 24, 20,
                       (taru[id].getPx() - taruManager.getRadius())*scale,
-                      (taru[id].getPy() - taruManager.getRadius())*scale, 24, 24);
+                      (taru[id].getPy() - taruManager.getRadius())*scale, 24, 20);
   }
 
   function drawNowLoadingLabel() {
