@@ -21,43 +21,52 @@ var Stage = function() {
     return (x * colorOffset + blueOffset) + (y * stage_data.width * colorOffset);
   }
 
-  this.isTaruInTheObject = function (x, y, region) {
-    x = parseInt(x);
-    y = parseInt(y);
-    var address1 = getRedAddress(x - region, y);
-    var address2 = getRedAddress(x + region, y);
-    var address3 = getRedAddress(x, y - region);
-    var address4 = getRedAddress(x, y + region);
+  this.isTaruInTheObject = function (x, y) {
+    var r = taruManager.getRadius();
+    leftX1  = parseInt(x - r);
+    leftX2  = parseInt(x - r * sin45);
+    centerX = parseInt(x);
+    rightX2 = parseInt(x + r * sin45);
+    rightX1 = parseInt(x + r);
+    upperY1 = parseInt(y - r);
+    upperY2 = parseInt(y - r * sin45);
+    centerY = parseInt(y);
+    lowerY2 = parseInt(y + r * sin45);
+    lowerY1 = parseInt(y + r);
+    
+    var address1 = getRedAddress(leftX1,  centerY); // left-end
+    var address2 = getRedAddress(leftX2,  upperY2); // upper-left
+    var address3 = getRedAddress(leftX2,  lowerY2); // lower-left
+    var address4 = getRedAddress(centerX, upperY1); // top
+    var address5 = getRedAddress(centerX, lowerY1); // bottom
+    var address6 = getRedAddress(rightX2, upperY2); // upper-right
+    var address7 = getRedAddress(rightX2, lowerY2); // lower-right
+    var address8 = getRedAddress(rightX1, centerY); // right-end
 
     return (stage_data.data[address1] == 255) ||
            (stage_data.data[address2] == 255) ||
            (stage_data.data[address3] == 255) ||
-           (stage_data.data[address4] == 255);
+           (stage_data.data[address4] == 255) ||
+           (stage_data.data[address5] == 255) ||
+           (stage_data.data[address6] == 255) ||
+           (stage_data.data[address7] == 255) ||
+           (stage_data.data[address8] == 255);
   };
 
-  this.getTaruEscapeDistance = function (x, y, region) {
-      var upperDistance = getUpperTaruEscapeDistance(x, y, region);
-      var lowerDistance = getLowerTaruEscapeDistance(x, y, region); // 必要ない
+  this.getTaruEscapeDistance = function (x, y) {
+    var upperDistance = getUpperTaruEscapeDistance(x, y);
+    var lowerDistance = stageThickness + taruManager.getSize() - upperDistance;
 
-      return (upperDistance > lowerDistance) ?  lowerDistance : -upperDistance;
+    return (upperDistance > lowerDistance) ? lowerDistance : -upperDistance + 1;
   };
 
-  function getUpperTaruEscapeDistance (x, y, region) {
-      for (var i = 1; i < stageThickness + taruManager.getSize(); i++) {
-        if (!self.isTaruInTheObject(x, y - i, region)) {
-            return i - 1;
-        }
+  function getUpperTaruEscapeDistance (x, y) {
+    for (var i = 1; i < stageThickness + taruManager.getSize(); i++) {
+      if (!self.isTaruInTheObject(x, y - i)) {
+          return i;
       }
-      return stageThickness + taruManager.getSize() + 1;
-  }
-
-  function getLowerTaruEscapeDistance (x, y, region) {
-      for (var i = 1; i < stageThickness + taruManager.getSize(); i++) {
-        if (!self.isTaruInTheObject(x, y + i, region)) {
-            return i + 1;
-        }
-      }
-      return stageThickness + taruManager.getSize() + 1;
+    }
+    return stageThickness + taruManager.getSize();
   }
 
   this.isHigeInTheObject = function (x, y, size) {

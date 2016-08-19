@@ -1,4 +1,6 @@
 
+var sin45 = 1 / 1.41421356;
+
 var square = function(val) {
     return val * val;
 };
