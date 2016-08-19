@@ -69,7 +69,8 @@ var Stage = function() {
     return stageThickness + taruManager.getSize();
   }
 
-  this.isHigeInTheObject = function (x, y, size) {
+  this.isHigeInTheObject = function (x, y) {
+    var size = hige.getSize();
     var address1 = getRedAddress(x, y + size);
     var address2 = getRedAddress(x + size, y + size);
 
@@ -77,18 +78,19 @@ var Stage = function() {
            (stage_data.data[address2] == 255);
   };
 
-  this.getHigeEscapeDistance = function (x, y, size) {
+  this.getHigeEscapeDistance = function (x, y) {
     for (var i = 1; i < stageThickness; i++) {
-      if (!this.isHigeInTheObject(x, y - i, size)) {
+      if (!this.isHigeInTheObject(x, y - i)) {
           return i - 1;
       }
     }
     return stageThickness;
   };
 
-  this.canHigeGrabTheLadder = function (x, y, size) {
+  this.canHigeGrabTheLadder = function (x, y) {
     var leftOk = false,
-        rightOk = false;
+        rightOk = false,
+        size = hige.getSize();
     for (var i = 0; i < parseInt(size / 2); i++) {
       if (isThereGreenPixelWithinUpperAndLower3pixels(x + i, y + size)) {
         leftOk = true;
@@ -112,11 +114,12 @@ var Stage = function() {
             stage_data.data[address3] == 255);
   }
 
-  this.isHigeAwayFromTheLadder = function (x, y, size) {
-    return this.canHigeGrabTheLadder(x, y, size) ? false : true;
+  this.isHigeAwayFromTheLadder = function (x, y) {
+    return this.canHigeGrabTheLadder(x, y) ? false : true;
   };
 
-  this.isHigeAtTheGoalArea = function (x, y, size) {
+  this.isHigeAtTheGoalArea = function (x, y) {
+    var size = hige.getSize();
     var address1 = getBlueAddress(x, y);
     var address2 = getBlueAddress(x, y + size);
     var address3 = getBlueAddress(x + size, y);
