@@ -5,7 +5,7 @@ var TaruManager = function () {
   var size = 11,
       radius = parseInt(size / 2),
       numMax = 256,
-      restTaru = 0.9,  // タル同士の反発係数(restitution)
+      restTaru = 0.9,  // タル同士の反発係数
       restFloor = 0.5, // 床の反発係数
       spawnPx = 70 + radius,
       spawnPy = 48 + radius,
@@ -37,12 +37,12 @@ var TaruManager = function () {
         if (isHitAmongCircles(this.px, this.py, taru[i].px, taru[i].py, size)) {
 
           // 座標の更新(お互いを少しずつ離す)
-          var dx = distance(this.px, taru[i].px) / 6; // 要調整
-          var dy = distance(this.py, taru[i].py) / 6;
+          var dx = distance(this.px, taru[i].px) / 8;
+          var dy = distance(this.py, taru[i].py) / 8;
           if (this.px < taru[i].px) { this.px -= dx; taru[i].px += dx; } // 自分が左、相手が右のとき
           else                      { this.px += dx; taru[i].px -= dx; } // 自分が右、相手が左のとき
-          if (this.py < taru[i].py) { this.py -= dy; taru[i].py += dy; } // 自分が下、相手が上のとき
-          else                      { this.py += dy; taru[i].py -= dy; } // 自分が上、相手が下のとき
+          if (this.py < taru[i].py) { this.py -= dy; taru[i].py += dy; } // 自分が上、相手が下のとき
+          else                      { this.py += dy; taru[i].py -= dy; } // 自分が下、相手が上のとき
 
           // 速度の更新(交換と減衰)
           var tempVx = this.vx;
@@ -52,11 +52,11 @@ var TaruManager = function () {
           taru[i].vx = tempVx * restTaru;
           taru[i].vy = tempVy * restTaru;
 
-          // 当たったらちょっと上にバウンドさせてみる
-          if ((abs(this.vy) < gravity) && (abs(taru[i].vy) < gravity)) {
-              this.vy    -= Math.random() * 0.5 + 0.5;
-              taru[i].vy -= Math.random() * 0.5 + 0.5;
-          }
+          // ランダムにバウンドさせてみる
+          if (this.px < taru[i].px) { this.vx -= Math.random()/3; taru[i].vx += Math.random()/3; } // 自分が左、相手が右のとき
+          else                      { this.vx += Math.random()/3; taru[i].vx -= Math.random()/3; } // 自分が右、相手が左のとき
+          if (this.py < taru[i].py) { this.vy -= Math.random()/3; taru[i].vy += Math.random()/3; } // 自分が上、相手が下のとき
+          else                      { this.vy += Math.random()/3; taru[i].vy -= Math.random()/3; } // 自分が下、相手が上のとき
         }
       }
 
@@ -84,7 +84,7 @@ var TaruManager = function () {
       }
 
       // ステージ障害物との当たり判定
-      if (stage.isTaruInTheObject(this.px, this.py, radius)) { // TODO 改良の余地あり
+      if (stage.isTaruInTheObject(this.px, this.py, radius)) {
         this.px = parseInt(this.px);
         this.py = parseInt(this.py);
         var escapeDistance = stage.getTaruEscapeDistance(this.px, this.py, radius);
@@ -99,7 +99,7 @@ var TaruManager = function () {
 
       // X加速度の更新
       if (isGrounded) {
-        this.vx *= 1.0; // 接地面との摩擦
+        this.vx *= 0.98; // 接地面との摩擦
       }
 
       // Y加速度の更新
