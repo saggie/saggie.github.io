@@ -27,7 +27,7 @@ var TaruManager = function () {
     getPy : function () { return this.py; },
     isMoving : function () { return !this.isStopped; },
 
-    step : function () {
+    calc : function () {
 
       var isGrounded = false; // このフレーム内で接地したかどうか
       var previousPx = parseInt(this.px);
@@ -87,11 +87,9 @@ var TaruManager = function () {
           isGrounded = true;
       }
 
-      // ステージ障害物との当たり判定
-      var intPx = parseInt(this.px);
-      var intPy = parseInt(this.py)
-      if (stage.isTaruInTheObject(intPx, intPy, radius)) {
-        var escapeDistance = stage.getTaruEscapeDistance(intPx, intPy, radius);
+      // ステージとの当たり判定
+      if (stage.isTaruInTheObject(this.px, this.py, radius)) {
+        var escapeDistance = stage.getTaruEscapeDistance(this.px, this.py, radius);
         this.py += escapeDistance;
         this.vy *= -1;
         if (escapeDistance <= 0) {
@@ -129,8 +127,8 @@ var TaruManager = function () {
         var higeCenterY = hige.getPy() + hige.getSize() / 2;
         
         // 座標の更新(お互いを少しずつ離す、少し速度も与えてみる)
-        var dx = distance(this.px, higeCenterX) / 6; // 要調整
-        var dy = distance(this.py, higeCenterY) / 6;
+        var dx = distance(this.px, higeCenterX) / 8;
+        var dy = distance(this.py, higeCenterY) / 8;
         if (this.px < higeCenterX) { this.px -= dx; this.vx -= 0.5; hige.addPx(+dx); } // タルが左、ヒゲが右のとき
         else                       { this.px += dx; this.vx += 0.5; hige.addPx(-dx); } // タルが右、ヒゲが左のとき
         if (this.py < higeCenterY) { this.py -= dy; this.vy -= 0.5; hige.addPy(+dy); } // タルが上、ヒゲが下のとき
@@ -158,7 +156,7 @@ var TaruManager = function () {
 
   this.calcAll = function () {
     for (var i = 0; i < taru.length; i++) {
-      taru[i].step();
+      taru[i].calc();
       calculatedTaruIdList.push(i);
     }
     calculatedTaruIdList = [];

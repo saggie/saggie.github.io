@@ -25,11 +25,11 @@ var Kong = function() {
   this.updateState = function () {
     if (!isTaruThrowingFinished ()) {
       var dividedInterval = parseInt(nextTaruThrowingInterval / 3);
-      var erappesedFrame = globalTimeFrame - previousTaruThrownTimeFrame
-      if (erappesedFrame > dividedInterval * 2) {
+      var erappesedTimeFrame = globalTimeFrame - previousTaruThrownTimeFrame
+      if (erappesedTimeFrame > dividedInterval * 2) {
         state = states["center1"];
         return;
-      } else if (erappesedFrame > dividedInterval * 1) {
+      } else if (erappesedTimeFrame > dividedInterval * 1) {
         state = states["left1"];
         return;
       } else {
@@ -57,7 +57,7 @@ var Kong = function() {
     previousTaruThrownTimeFrame = globalTimeFrame;
     
     var isHigeNearTheGoal = (hige.getPy() < screenWidth / 4) ? true : false;
-    nextTaruThrowingInterval = isHigeNearTheGoal ? parseInt(Math.random() * 9)
+    nextTaruThrowingInterval = isHigeNearTheGoal ? parseInt(Math.random() * 9) + 3
                                                  : parseInt(Math.random() * 18) + 3;
   };
 

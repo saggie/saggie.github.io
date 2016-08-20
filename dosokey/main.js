@@ -52,10 +52,20 @@ var globalTimeFrame = 0,
     context.drawImage(clear_img, 0, 0, 208, 48, 144, 208, 208, 48);
   }
 
+  function hideHeart() {
+    context.fillStyle="#000000";
+    context.fillRect(242, 0, 32, 32);
+  }
+
   function render() {
 
     // draw background
     context.drawImage(bg_img, 0, 0);
+
+    // hide Heart
+    if (!hige.isCleared()) {
+      hideHeart();
+    }
 
     // draw Kong
     switch (kong.getState()) {
@@ -100,9 +110,9 @@ var globalTimeFrame = 0,
       drawGameClearLabel();
     }
 
-    // debug text
-    //var row = 10;
-    //context.fillText(globalTimeFrame, 10, row); row += 10;
+    // draw debug text
+    //context.fillStyle="#FFFFFF";
+    //context.fillText(parseInt(globalTimeFrame / 30), 10, 10);
   }
 
   var interval = setInterval(loop, sleepTime);

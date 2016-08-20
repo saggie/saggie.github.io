@@ -6,7 +6,6 @@ var Hige = function () {
       size = 16,
       px = spawnPx,
       py = spawnPy,
-      vx = 0,
       vy = 0,
       movingCount = 0,
       isGrounded = false,
@@ -74,7 +73,7 @@ var Hige = function () {
     }
 
     // ステージとの当たり判定
-    if (!isLaddering && stage.isHigeInTheObject(px, py) || isAtBottom) {
+    if (!isLaddering && stage.isHigeInTheObject(px, py)) {
       var escapeDistance = stage.getHigeEscapeDistance(px, py);
       py -= escapeDistance;
       isGrounded = true;
@@ -82,6 +81,9 @@ var Hige = function () {
     } else {
       isGrounded = false;
     }
+
+    // ステージの底にいる
+    if (isAtBottom) { isGrounded = true; }
 
     // ジャンプ
     if (isSpaceKeyPressed && isGrounded && !isLaddering) {
@@ -99,7 +101,7 @@ var Hige = function () {
 
     // ハシゴの昇降
     if ((isUpKeyPressed || isDownKeyPressed) && (isGrounded || isLaddering)) {
-      if (stage.canHigeGrabTheLadder(px, py) || isAtBottom) {
+      if (stage.canHigeGrabTheLadder(px, py)) {
         isLaddering = true;
         if (isUpKeyPressed)   { py--; movingCount++; }
         if (isDownKeyPressed) { py++; movingCount++; }
@@ -110,7 +112,7 @@ var Hige = function () {
     if (isLeftKeyPressed)  { px--; isFacingRight = false; movingCount++; }
     if (isRightKeyPressed) { px++; isFacingRight = true;  movingCount++; }
 
-    // Higeの座標をスクリーン内に制限する
+    // 座標をスクリーン内に制限する
     if (px < 0) { px = 0; }
     if (py < 0) { py = 0; }
     if (px + size > screenWidth) { px = screenWidth - size; }
@@ -118,7 +120,9 @@ var Hige = function () {
       py = screenHeight - size + 1;
       vy = 0;
       isAtBottom = true;
-    } else { isAtBottom = false; }
+    } else { 
+      isAtBottom = false;
+    }
     
     // クリア判定
     if (stage.isHigeAtTheGoalArea(px, py) && isGrounded && !isLaddering) {
