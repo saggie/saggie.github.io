@@ -70,6 +70,8 @@ var Stage = function() {
   }
 
   this.isHigeInTheObject = function (x, y) {
+    x = parseInt(x);
+    y = parseInt(y);
     var size = hige.getSize();
     var address1 = getRedAddress(x, y + size);
     var address2 = getRedAddress(x + size, y + size);
@@ -105,6 +107,8 @@ var Stage = function() {
   };
 
   function isThereGreenPixelWithinUpperAndLower3pixels (x, y) {
+    x = parseInt(x);
+    y = parseInt(y);
     var address1 = getGreenAddress(x, y);
     var address2 = getGreenAddress(x, y - 1);
     var address3 = getGreenAddress(x, y + 1);
@@ -119,6 +123,8 @@ var Stage = function() {
   };
 
   this.isHigeAtTheGoalArea = function (x, y) {
+    x = parseInt(x);
+    y = parseInt(y);
     var size = hige.getSize();
     var address1 = getBlueAddress(x, y);
     var address2 = getBlueAddress(x, y + size);

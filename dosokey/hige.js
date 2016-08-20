@@ -67,10 +67,6 @@ var Hige = function () {
 
   this.tryMove = function () {
 
-    // 整数化しておく
-    px = parseInt(px);
-    py = parseInt(py);
-
     // ハシゴ昇降の継続判定
     if (isLaddering && stage.isHigeAwayFromTheLadder(px, py)) {
       // 前回ハシゴを昇降していたけど、今はハシゴから離れている
@@ -88,8 +84,8 @@ var Hige = function () {
     }
 
     // ジャンプ
-    if (flgKeySpace && isGrounded && !isLaddering) {
-      vy -= 2;
+    if (isSpaceKeyPressed && isGrounded && !isLaddering) {
+      vy -= 2.5;
       py -= 1;
     }
 
@@ -102,19 +98,17 @@ var Hige = function () {
     }
 
     // ハシゴの昇降
-    if ((flgKeyUp || flgKeyDown) && (isGrounded || isLaddering)) {
-      px = parseInt(px);
-      py = parseInt(py);
+    if ((isUpKeyPressed || isDownKeyPressed) && (isGrounded || isLaddering)) {
       if (stage.canHigeGrabTheLadder(px, py) || isAtBottom) {
         isLaddering = true;
-        if (flgKeyUp)   { py--; movingCount++; }
-        if (flgKeyDown) { py++; movingCount++; }
+        if (isUpKeyPressed)   { py--; movingCount++; }
+        if (isDownKeyPressed) { py++; movingCount++; }
       }
     }
 
     // 横方向の移動
-    if (flgKeyLeft)  { px--; isFacingRight = false; movingCount++; }
-    if (flgKeyRight) { px++; isFacingRight = true;  movingCount++; }
+    if (isLeftKeyPressed)  { px--; isFacingRight = false; movingCount++; }
+    if (isRightKeyPressed) { px++; isFacingRight = true;  movingCount++; }
 
     // Higeの座標をスクリーン内に制限する
     if (px < 0) { px = 0; }

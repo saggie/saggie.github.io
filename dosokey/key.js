@@ -1,9 +1,9 @@
 
-var flgKeyUp = false,
-    flgKeyDown = false,
-    flgKeyLeft = false,
-    flgKeyRight = false,
-    flgKeySpace = false;
+var isUpKeyPressed = false,
+    isDownKeyPressed = false,
+    isLeftKeyPressed = false,
+    isRightKeyPressed = false,
+    isSpaceKeyPressed = false;
       
 (function () {
 
@@ -22,21 +22,21 @@ var flgKeyUp = false,
 
   function onKeyDown(e) {
     switch (e.keyCode) {
-      case KV_W: flgKeyUp = true; break;
-      case KV_S: flgKeyDown = true; break;
-      case KV_A: flgKeyLeft = true; break;
-      case KV_D: flgKeyRight = true; break;
-      case KV_SPACE: flgKeySpace = true; break;
+      case KV_W: isUpKeyPressed = true; break;
+      case KV_S: isDownKeyPressed = true; break;
+      case KV_A: isLeftKeyPressed = true; break;
+      case KV_D: isRightKeyPressed = true; break;
+      case KV_SPACE: isSpaceKeyPressed = true; break;
     }
   }
 
   function onKeyUp(e) {
     switch (e.keyCode) {
-      case KV_W: flgKeyUp = false; break;
-      case KV_S: flgKeyDown = false; break;
-      case KV_A: flgKeyLeft = false; break;
-      case KV_D: flgKeyRight = false; break;
-      case KV_SPACE: flgKeySpace = false; break;
+      case KV_W: isUpKeyPressed = false; break;
+      case KV_S: isDownKeyPressed = false; break;
+      case KV_A: isLeftKeyPressed = false; break;
+      case KV_D: isRightKeyPressed = false; break;
+      case KV_SPACE: isSpaceKeyPressed = false; break;
     }
   }
 
@@ -47,40 +47,36 @@ var flgKeyUp = false,
     e.preventDefault();
 
     if (canvas.width / 3 * 2 < touchPx) {
-      flgKeyRight = true;
-      flgKeyLeft = false;
+      isRightKeyPressed = true;
+      isLeftKeyPressed = false;
     } else if (canvas.width / 3 > touchPx) {
-      flgKeyRight = false;
-      flgKeyLeft = true;
+      isRightKeyPressed = false;
+      isLeftKeyPressed = true;
     } else {
-      flgKeyRight = false;
-      flgKeyLeft = false;
+      isRightKeyPressed = false;
+      isLeftKeyPressed = false;
     }
 
     if (canvas.height / 3 * 2 < touchPy) {
-      flgKeyUp = false;
-      flgKeyDown = true;
+      isUpKeyPressed = false;
+      isDownKeyPressed = true;
     } else if (canvas.height / 3 > touchPy) {
-      flgKeyUp = true;
-      flgKeyDown = false;
+      isUpKeyPressed = true;
+      isDownKeyPressed = false;
     } else {
-      flgKeyUp = false;
-      flgKeyDown = false;
+      isUpKeyPressed = false;
+      isDownKeyPressed = false;
     }
     
-    if (e.touches.length <= 1) {
-      flgKeySpace = false;
-    } else {
-      flgKeySpace = true;
-    }
+    isSpaceKeyPressed = (e.touches.length <= 1) ? false : true;
   }
 
   function onTouchEnd(e) {
-    flgKeyUp = false;;
-    flgKeyDown = false;
-    flgKeyLeft = false;
-    flgKeyRight = false;
-    flgKeySpace = false;
+    isUpKeyPressed = false;;
+    isDownKeyPressed = false;
+    isLeftKeyPressed = false;
+    isRightKeyPressed = false;
+    isSpaceKeyPressed = false;
   }
 
 })();
