@@ -83,11 +83,15 @@ var globalTimeFrame = 0,
     
     // draw Taru
     for (var i = 0; i < taru.length; i++) {
-      switch ((globalTimeFrame + taru[i].getId()) % 12) {
-        case 0: case 1: case 2: drawTaru(i, 0); break;
-        case 3: case 4: case 5: drawTaru(i, 1); break;
-        case 6: case 7: case 8: drawTaru(i, 2); break;
-        case 9: case 10: case 11: drawTaru(i, 3); break;
+      if (taru[i].isMoving()) {
+        switch ((globalTimeFrame + taru[i].getId()) % 12) {
+          case 0: case 1: case 2: drawTaru(i, 0); break;
+          case 3: case 4: case 5: drawTaru(i, 1); break;
+          case 6: case 7: case 8: drawTaru(i, 2); break;
+          case 9: case 10: case 11: drawTaru(i, 3); break;
+        }
+      } else {
+        drawTaru(i, taru[i].getId() % 4);
       }
     }
 

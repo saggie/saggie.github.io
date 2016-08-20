@@ -51,11 +51,14 @@ var Kong = function() {
     if (globalTimeFrame - previousTaruThrownTimeFrame < nextTaruThrowingInterval) {
       return;
     }
-
+    
     taruManager.generateTaru(Math.random() * 5 + 3, Math.random() * - 3 - 2);
-
+    
     previousTaruThrownTimeFrame = globalTimeFrame;
-    nextTaruThrowingInterval = parseInt(Math.random() * 18) + 3;
+    
+    var isHigeNearTheGoal = (hige.getPy() < screenWidth / 4) ? true : false;
+    nextTaruThrowingInterval = isHigeNearTheGoal ? parseInt(Math.random() * 9)
+                                                 : parseInt(Math.random() * 18) + 3;
   };
 
 };

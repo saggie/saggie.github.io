@@ -5,8 +5,9 @@ var TaruManager = function () {
   var size = 11,
       radius = parseInt(size / 2),
       numMax = 256,
-      restTaru = 0.9,  // タル同士の反発係数
-      restFloor = 0.5, // 床の反発係数
+      restitutionTaru = 0.9,  // タル同士の反発係数
+      restitutionFloor = 0.5, // 床の反発係数
+      frictionFloor = 0.98,   // 床の摩擦係数
       spawnPx = 70 + radius,
       spawnPy = 48 + radius,
       calculatedTaruIdList = [],
@@ -24,10 +25,13 @@ var TaruManager = function () {
     getVy : function () { return this.vy; },
     getPx : function () { return this.px; },
     getPy : function () { return this.py; },
+    isMoving : function () { return !this.isStopped; },
 
     step : function () {
 
       var isGrounded = false; // このフレーム内で接地したかどうか
+      var previousPx = parseInt(this.px);
+      var previousPy = parseInt(this.py);
 
       // タル同士の衝突判定・応答 begin
       for (var i = calculatedTaruIdList.length; i < taru.length; i++) {
@@ -47,10 +51,10 @@ var TaruManager = function () {
           // 速度の更新(交換と減衰)
           var tempVx = this.vx;
           var tempVy = this.vy;
-          this.vx = taru[i].vx * restTaru;
-          this.vy = taru[i].vy * restTaru;
-          taru[i].vx = tempVx * restTaru;
-          taru[i].vy = tempVy * restTaru;
+          this.vx = taru[i].vx * restitutionTaru;
+          this.vy = taru[i].vy * restitutionTaru;
+          taru[i].vx = tempVx * restitutionTaru;
+          taru[i].vy = tempVy * restitutionTaru;
 
           // ランダムにバウンドさせてみる
           if (this.px < taru[i].px) { this.vx -= Math.random()/3; taru[i].vx += Math.random()/3; } // 自分が左、相手が右のとき
@@ -79,27 +83,27 @@ var TaruManager = function () {
       }
       if (this.py > screenHeight - radius) {
           this.py = screenHeight - radius;
-          this.vy *= -1 * restFloor;
+          this.vy *= -1 * restitutionFloor;
           isGrounded = true;
       }
 
       // ステージ障害物との当たり判定
-      if (stage.isTaruInTheObject(this.px, this.py, radius)) {
-        this.px = parseInt(this.px);
-        this.py = parseInt(this.py);
-        var escapeDistance = stage.getTaruEscapeDistance(this.px, this.py, radius);
+      var intPx = parseInt(this.px);
+      var intPy = parseInt(this.py)
+      if (stage.isTaruInTheObject(intPx, intPy, radius)) {
+        var escapeDistance = stage.getTaruEscapeDistance(intPx, intPy, radius);
         this.py += escapeDistance;
         this.vy *= -1;
         if (escapeDistance <= 0) {
           // 上(マイナス)方向に逃げたら接地と判断する
           isGrounded = true;
-          this.vy *= restFloor;
+          this.vy *= restitutionFloor;
         }
       }
 
       // X加速度の更新
       if (isGrounded) {
-        this.vx *= 0.98; // 接地面との摩擦
+        this.vx *= frictionFloor; // 接地面との摩擦
       }
 
       // Y加速度の更新
@@ -111,27 +115,32 @@ var TaruManager = function () {
       
       // ヒゲとの干渉
       if (isHitAmongRectangleAndCircle(hige.getPx(), hige.getPy(),
-                                       hige.getSize(), hige.getSize(),
+                                       hige.getSize()-4, hige.getSize(),
                                        this.px, this.py, radius)) {
         // ヒゲを動かす
         hige.addPx(this.vx);
         hige.addPy(this.vy);
         
         // ヒゲに動かされる
-        this.vx *= -1 * 0.8;
-        this.vy *= -1 * 0.8;
+        if (abs(this.vx) > 1) { this.vx *= -0.8; }
+        if (abs(this.vy) > 1) { this.vy *= -0.8; }
         
         var higeCenterX = hige.getPx() + hige.getSize() / 2;
         var higeCenterY = hige.getPy() + hige.getSize() / 2;
         
-        // 座標の更新(お互いを少しずつ離す、少し速度を与えてみる)
+        // 座標の更新(お互いを少しずつ離す、少し速度も与えてみる)
         var dx = distance(this.px, higeCenterX) / 6; // 要調整
         var dy = distance(this.py, higeCenterY) / 6;
-        if (this.px < higeCenterX) { this.px -= dx; this.vx -= dx * 0.05; hige.addPx(+dx); } // タルが左、ヒゲが右のとき
-        else                       { this.px += dx; this.vx += dx * 0.05; hige.addPx(-dx); } // タルが右、ヒゲが左のとき
-        if (this.py < higeCenterY) { this.py -= dy; this.vy -= dy * 0.05; hige.addPy(+dy); } // タルが下、ヒゲが上のとき
-        else                       { this.py += dy; this.vy += dy * 0.05; hige.addPy(-dy); } // タルが上、ヒゲが下のとき
+        if (this.px < higeCenterX) { this.px -= dx; this.vx -= 0.5; hige.addPx(+dx); } // タルが左、ヒゲが右のとき
+        else                       { this.px += dx; this.vx += 0.5; hige.addPx(-dx); } // タルが右、ヒゲが左のとき
+        if (this.py < higeCenterY) { this.py -= dy; this.vy -= 0.5; hige.addPy(+dy); } // タルが上、ヒゲが下のとき
+        else                       { this.py += dy; this.vy += 0.5; hige.addPy(-dy); } // タルが下、ヒゲが上のとき
       }
+      
+      // このフレーム内で動きがなかった
+      this.isStopped = (parseInt(this.px) == previousPx) &&
+                       (parseInt(this.py) == previousPy) &&
+                       (abs(this.vx) < 0.03 && abs(this.vy) < 0.03) ? true : false;
     }
   };
 
