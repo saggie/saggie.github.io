@@ -82,7 +82,7 @@ var TaruManager = function () {
           this.vy *= -1;
       }
       if (this.py > screenHeight - radius) {
-          this.py = screenHeight - radius;
+          this.py = screenHeight - radius + 1;
           this.vy *= -1 * restitutionFloor;
           isGrounded = true;
       }
@@ -140,7 +140,7 @@ var TaruManager = function () {
       // このフレーム内で動きがなかった
       this.isStopped = (parseInt(this.px) == previousPx) &&
                        (parseInt(this.py) == previousPy) &&
-                       (abs(this.vx) < 0.03 && abs(this.vy) < 0.03) ? true : false;
+                       (abs(this.vx) < 0.04 && abs(this.vy) < 0.04) ? true : false;
     }
   };
 

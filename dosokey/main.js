@@ -101,9 +101,8 @@ var globalTimeFrame = 0,
     }
 
     // debug text
-    var row = 10;
-    context.fillStyle="#00FFFF";
-    context.fillText(globalTimeFrame, 10, row); row += 10;
+    //var row = 10;
+    //context.fillText(globalTimeFrame, 10, row); row += 10;
   }
 
   var interval = setInterval(loop, sleepTime);

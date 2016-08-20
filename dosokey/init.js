@@ -2,6 +2,7 @@
 
 var canvas  = document.getElementById('main'),
     context = canvas.getContext('2d');
+    context.fillStyle="#FFFFFF";
 
 var scale = 2,
     screenWidth = canvas.width / scale,
