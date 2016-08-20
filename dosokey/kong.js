@@ -57,7 +57,7 @@ var Kong = function() {
     previousTaruThrownTimeFrame = globalTimeFrame;
     
     var isHigeNearTheGoal = (hige.getPy() < screenWidth / 4) ? true : false;
-    nextTaruThrowingInterval = isHigeNearTheGoal ? parseInt(Math.random() * 9) + 3
+    nextTaruThrowingInterval = isHigeNearTheGoal ? parseInt(Math.random() * 15) + 3
                                                  : parseInt(Math.random() * 18) + 3;
   };
 
