@@ -57,19 +57,13 @@ var smallCharProto = {
   getData: function (x, y) { return this.data[x + y * this.width]; }
 };
 
-var dayCharProto = {
+var dayStringProto = {
   width: 13,
   height: 5,
   getData: function (x, y) { return this.data[x + y * this.width]; }
 };
 
 var largeCharProto = {
-  width: 5,
-  height: 7,
-  getData: function (x, y) { return this.data[x + y * this.width]; }
-};
-
-var heartProto = {
   width: 5,
   height: 7,
   getData: function (x, y) { return this.data[x + y * this.width]; }
@@ -92,13 +86,13 @@ var sc7 = Object.create(smallCharProto);
 var sc8 = Object.create(smallCharProto);
 var sc9 = Object.create(smallCharProto);
 var scSlash = Object.create(smallCharProto);
-var scSun = Object.create(dayCharProto);
-var scMon = Object.create(dayCharProto);
-var scTue = Object.create(dayCharProto);
-var scWed = Object.create(dayCharProto);
-var scThu = Object.create(dayCharProto);
-var scFri = Object.create(dayCharProto);
-var scSat = Object.create(dayCharProto);
+var scSun = Object.create(dayStringProto);
+var scMon = Object.create(dayStringProto);
+var scTue = Object.create(dayStringProto);
+var scWed = Object.create(dayStringProto);
+var scThu = Object.create(dayStringProto);
+var scFri = Object.create(dayStringProto);
+var scSat = Object.create(dayStringProto);
 var lc0 = Object.create(largeCharProto);
 var lc1 = Object.create(largeCharProto);
 var lc2 = Object.create(largeCharProto);
@@ -109,10 +103,10 @@ var lc6 = Object.create(largeCharProto);
 var lc7 = Object.create(largeCharProto);
 var lc8 = Object.create(largeCharProto);
 var lc9 = Object.create(largeCharProto);
-var heart0 = Object.create(heartProto);
-var heart1 = Object.create(heartProto);
-var heart2 = Object.create(heartProto);
-var heart3 = Object.create(heartProto);
+var heart0 = Object.create(largeCharProto);
+var heart1 = Object.create(largeCharProto);
+var heart2 = Object.create(largeCharProto);
+var heart3 = Object.create(largeCharProto);
 var colon0 = Object.create(colonProto);
 var colon1 = Object.create(colonProto);
 var colon2 = Object.create(colonProto);
