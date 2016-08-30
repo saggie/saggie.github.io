@@ -12,13 +12,12 @@ var canvas = document.createElement('canvas');
 var shortSide =
   (window.innerWidth > window.innerHeight) ? window.innerHeight
                                            : window.innerWidth;
-var scale = window.devicePixelRatio;
-
-var screenResolution = 32;
-var screenSize = parseInt(shortSide * scale / screenResolution) * screenResolution;
-
 canvas.style.width = shortSide + 'px';
 canvas.style.height = shortSide + 'px';
+
+var scale = window.devicePixelRatio;
+var screenResolution = 32;
+var screenSize = parseInt(shortSide * scale / screenResolution) * screenResolution;
 canvas.width = screenSize;
 canvas.height = screenSize;
 
@@ -37,7 +36,7 @@ function clearScreen () {
   context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-var dotSize = parseInt(canvas.width / screenResolution);
+var dotSize = parseInt(screenSize / screenResolution);
 
 function drawDot (x, y) {
   context.fillStyle = "#000000";
