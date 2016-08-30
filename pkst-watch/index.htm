@@ -8,21 +8,24 @@
 <script type="text/javascript">
 <!--
 
-document.body.addEventListener('touchstart', function (event) { event.preventDefault(); } );
-
-var scale = window.devicePixelRatio;
 var canvas = document.createElement('canvas');
 var shortSide =
   (window.innerWidth > window.innerHeight) ? window.innerHeight
                                            : window.innerWidth;
+var scale = window.devicePixelRatio;
+
+var screenResolution = 32;
+var screenSize = parseInt(shortSide * scale / screenResolution) * screenResolution;
+
 canvas.style.width = shortSide + 'px';
 canvas.style.height = shortSide + 'px';
-canvas.width = shortSide * scale;
-canvas.height = shortSide * scale;
+canvas.width = screenSize;
+canvas.height = screenSize;
 
 var container = document.createElement('div');
 container.style.width = shortSide + 'px';
 container.style.height = shortSide + 'px';
+container.style.margin = '0 auto';
 container.style.overflow = 'hidden';
 container.appendChild(canvas);
 document.body.appendChild(container);
@@ -34,11 +37,11 @@ function clearScreen () {
   context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-var dotSize = parseInt(canvas.width / (32+1));
+var dotSize = parseInt(canvas.width / screenResolution);
 
 function drawDot (x, y) {
   context.fillStyle = "#000000";
-  context.fillRect((x+1) * dotSize, (y+1) * dotSize, dotSize, dotSize);
+  context.fillRect(x * dotSize, y * dotSize, dotSize, dotSize);
 }
 
 function drawChar (x, y, char) {
@@ -428,50 +431,52 @@ function loop () {
 
   // Draw Month
   var month = date.getMonth()+1;
-  if (month >= 10) { drawChar(0, 0, sc1); }
-  drawChar(3, 0, smallNumberList[month%10]);
+  if (month >= 10) { drawChar(0, 1, sc1); }
+  drawChar(3, 1, smallNumberList[month%10]);
 
   // Draw Slash
-  drawChar(7, 0, scSlash);
+  drawChar(7, 1, scSlash);
 
   // Draw Date
-  drawChar(11, 0, smallNumberList[parseInt(date.getDate()/10)]);
-  drawChar(15, 0, smallNumberList[date.getDate()%10]);
+  drawChar(11, 1, smallNumberList[parseInt(date.getDate()/10)]);
+  drawChar(15, 1, smallNumberList[date.getDate()%10]);
 
   // Draw Day
-  drawChar(19, 0, dayList[date.getDay()]);
+  drawChar(19, 1, dayList[date.getDay()]);
 
   // Draw Hours
-  drawChar(6, 11, largeNumberList[parseInt(date.getHours()/10)]);
-  drawChar(12, 11, largeNumberList[date.getHours()%10]);
+  drawChar(6, 12, largeNumberList[parseInt(date.getHours()/10)]);
+  drawChar(12, 12, largeNumberList[date.getHours()%10]);
 
   // Draw Minutes
-  drawChar(21, 11, largeNumberList[parseInt(date.getMinutes()/10)]);
-  drawChar(27, 11, largeNumberList[date.getMinutes()%10]);
+  drawChar(21, 12, largeNumberList[parseInt(date.getMinutes()/10)]);
+  drawChar(27, 12, largeNumberList[date.getMinutes()%10]);
 
   // Draw Seconds
-  drawChar(25, 25, smallNumberList[parseInt(date.getSeconds()/10)]);
-  drawChar(29, 25, smallNumberList[date.getSeconds()%10]);
+  drawChar(25, 26, smallNumberList[parseInt(date.getSeconds()/10)]);
+  drawChar(29, 26, smallNumberList[date.getSeconds()%10]);
 
   // Draw Memory Card
-  drawChar(0, 23, memCard);
+  drawChar(0, 24, memCard);
   if (numberOfBlocks < 10) {
-    drawChar(7, 25, smallNumberList[numberOfBlocks]);
+    drawChar(7, 26, smallNumberList[numberOfBlocks]);
   } else {
-    drawChar(7, 25, sc1);
-    drawChar(10, 25, smallNumberList[numberOfBlocks%10]);
+    drawChar(7, 26, sc1);
+    drawChar(10, 26, smallNumberList[numberOfBlocks%10]);
   }
 
   // Draw Heart
-  drawChar(0, 11, heartList[date.getSeconds()%4]);
+  drawChar(0, 12, heartList[date.getSeconds()%4]);
 
   // Draw Colon
-  drawChar(18, 11, colonList[date.getSeconds()%4]);
+  drawChar(18, 12, colonList[date.getSeconds()%4]);
 }
 
 var flameRate = 10;
 var sleepTime = parseInt(1000 / flameRate);
 setInterval(loop, sleepTime);
+
+document.body.addEventListener('touchstart', function (event) { event.preventDefault(); } );
 
 //-->
 </script>
