@@ -8,35 +8,37 @@
 <script type="text/javascript">
 <!--
 
-var canvas = document.createElement('canvas');
-var shortSide =
-  (window.innerWidth > window.innerHeight) ? window.innerHeight
-                                           : window.innerWidth;
-canvas.style.width = shortSide + 'px';
-canvas.style.height = shortSide + 'px';
+var canvas = document.createElement('canvas'),
+    container = document.createElement('div'),
+    context = canvas.getContext('2d'),
+    screenResolution = 32,
+    dotSize;
 
-var scale = window.devicePixelRatio;
-var screenResolution = 32;
-var screenSize = parseInt(shortSide * scale / screenResolution) * screenResolution;
-canvas.width = screenSize;
-canvas.height = screenSize;
-
-var container = document.createElement('div');
-container.style.width = shortSide + 'px';
-container.style.height = shortSide + 'px';
 container.style.margin = '0 auto';
 container.style.overflow = 'hidden';
 container.appendChild(canvas);
 document.body.appendChild(container);
 
-var context = canvas.getContext('2d');
+function resize() {
+  var shortSide =
+  (window.innerWidth > window.innerHeight) ? window.innerHeight
+                                           : window.innerWidth;
+  canvas.style.width = shortSide + 'px';
+  canvas.style.height = shortSide + 'px';
+  container.style.width = shortSide + 'px';
+  container.style.height = shortSide + 'px';
+
+  var screenSize = parseInt(shortSide * window.devicePixelRatio / screenResolution) * screenResolution;
+  canvas.width = screenSize;
+  canvas.height = screenSize;
+
+  dotSize = parseInt(screenSize / screenResolution);
+}
 
 function clearScreen () {
   context.fillStyle = "#ffffff";
   context.fillRect(0, 0, canvas.width, canvas.height);
 }
-
-var dotSize = parseInt(screenSize / screenResolution);
 
 function drawDot (x, y) {
   context.fillStyle = "#000000";
@@ -424,6 +426,7 @@ var numberOfBlocks = parseInt(Math.random() * 16);
 
 function loop () {
 
+  resize();
   clearScreen();
 
   var date = new Date();
