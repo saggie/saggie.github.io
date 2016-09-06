@@ -140,7 +140,7 @@ function clearScreen() {
 }
 
 function drawClockNumber(char, posX, posY) {
-  context.fillText(char, posX - fontSize/4, posY+fontSize*1/3);
+  context.fillText(char, posX - fontSize/4, posY + fontSize/3);
 }
 
 function drawClockNumbers() {
@@ -149,7 +149,7 @@ function drawClockNumbers() {
   drawClockNumber('6', (centerX), (centerY + baseSize * 31));
   drawClockNumber('9', (centerX - baseSize * 42), (centerY));
   drawClockNumber('1', (centerX - baseSize * 4), (centerY - baseSize * 31));
-  drawClockNumber('2', (centerX + baseSize * 3), (centerY - baseSize * 31));
+  drawClockNumber('2', (centerX + baseSize * 2.5), (centerY - baseSize * 31));
 }
 
 function toRadians(degrees) { return degrees * Math.PI / 180; }
