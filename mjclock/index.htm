@@ -213,6 +213,13 @@ function drawClockHands() {
   context.restore();
 }
 
+function updatePageTitle() {
+  var date = new Date();
+  document.title = ('0' + date.getHours()).slice(-2) + ":"
+                 + ('0' + date.getMinutes()).slice(-2) + ":"
+                 + ('0' + date.getSeconds()).slice(-2);
+}
+
 function loop() {
 
   resize();
@@ -221,6 +228,8 @@ function loop() {
   drawClockDials();
   drawClockNumbers();
   drawClockHands();
+  
+  updatePageTitle();
   
   var showCenterLineForDebug = false;
   if (showCenterLineForDebug) {
