@@ -5,18 +5,19 @@
   var canvas    = document.createElement('canvas'),
       container = document.createElement('div'),
       context   = canvas.getContext('2d'),
-      vgaWidth = 640,
-      vgaHeight = 480,
+      vgaWidth = 640 - 14 * fontWidth,
+      vgaHeight = 480 + 6 * fontHeight,
       aspectRatio = vgaWidth / vgaHeight,
       flameRate = 1,
-      maxCol = vgaWidth / fontWidth,
-      maxRow = vgaHeight / fontHeight,
       dotSize,
-      jpmode,
-      charIndex = 0;
-
-  var fonts = new Fonts();
-
+      year = null,
+      jpmode = false,
+      indicateToday = false,
+      blinkCursor = true,
+      currentLine = 0,
+      fonts = new Fonts(),
+      calendar = new Calendar();
+  
   function resize() {
     var screenWidth = window.innerWidth;
     var screenHeight = window.innerHeight;
@@ -30,11 +31,12 @@
     container.style.width  = screenWidth + 'px';
     container.style.height = screenHeight + 'px';
     
-    dotSize = parseInt(screenWidth * window.devicePixelRatio / vgaWidth);
+    var scale = screenWidth * window.devicePixelRatio / vgaWidth * 2;
+    dotSize = (scale < 1) ? scale : parseInt(scale);
     canvas.width  = dotSize * vgaWidth;
     canvas.height = dotSize * vgaHeight;
   }
-
+  
   function initialize() {
     container.style.margin = '0 auto';
     container.style.overflow = 'hidden';
@@ -42,15 +44,31 @@
     document.body.appendChild(container);
     setPropertiesByQueryString();
   }
-
+  
+  function clamp(input, min, max) {
+    return input < min ? min : input > max ? max : input;
+  }
+  
   function setPropertiesByQueryString() {
     var queryStrings = window.location.search.slice(1).split('&');
     for (var i = 0; i < queryStrings.length; i++) {
       var queryString = queryStrings[i].split('=');
       
-      // set jpmode if ?lang=jp
+      if (queryString[0] == "year") {
+        year = clamp(queryString[1], 0, 9999);
+      }
+      
+      // set jpmode if "?lang=jp"
       if (queryString[0] == "lang") {
         jpmode = (queryString[1] == 'ja') ? true : false;
+      }
+      
+      if (queryString[0] == "indicateToday") {
+        indicateToday = (queryString[1] == 1) ? true : false;
+      }
+      
+      if (queryString[0] == "blinkCursor") {
+        blinkCursor = (queryString[1] == 1) ? true : false;
       }
     }
   }
@@ -62,27 +80,43 @@
   
   function drawDot(color, x, y) {
     context.fillStyle = color;
-    context.fillRect(x * dotSize, y * dotSize, dotSize, dotSize);
+    var leftMargin = fontWidth * dotSize;
+    context.fillRect(x * dotSize + leftMargin, y * dotSize, dotSize, dotSize);
   }
   
   function drawFont(char, col, row) {
-    var fontData = fonts.getData(char);
-    for (var i = 0; i < fontData.length; i++) {
+    var fontRgbData = fonts.getFontRgbData(char);
+    for (var i = 0; i < fontRgbData.length; i++) {
       var x = i % fontWidth;
-      var y = parseInt(i / fontWidth);
-      drawDot(fontData[i], col * fontWidth + x, row * fontHeight + y);
+      var y = i / fontWidth | 0;
+      if (fontRgbData[i] == 'rgb(0, 0, 0)') { continue; }
+      drawDot(fontRgbData[i], (col * fontWidth) + x, (row * fontHeight) + y);
     }
   }
   
-  function putChar(char) {
-    drawFont(char, charIndex % maxCol, parseInt(charIndex / maxCol));
-    charIndex++;
+  function printLine(str) {
+    for (var i = 0; i < str.length; i++) {
+      if (str.charAt(i) == ' ') { continue; }
+      drawFont(str.charAt(i), i, currentLine);
+    }
+    currentLine++;
   }
   
-  function putString(str) {
-    for(var i = 0; i < str.length; i++) {
-      putChar(str.charAt(i));
+  function printCursor() {
+    drawFont("$", 0, currentLine);
+    if (!blinkCursor || (new Date().getSeconds() % 2) == 0) {
+      drawFont("DEL", 2, currentLine);
     }
+  }
+  
+  function indicateTodaysDate() {
+    var today = new Date();
+    if (!indicateToday || year != today.getFullYear()) { return; }
+    //highlightString(month, date); // TODO
+  }
+  
+  function updatePageTitle() {
+    document.title = "$ cal " + year;
   }
   
   function loop() {
@@ -90,12 +124,18 @@
     resize();
     clearScreen();
     
-    for (var i = 0; i < 64; i++) {
-      putString("This is SPARTA!!!! ");
-      putString("Is this SPARTA???? ");
-    }
+    year = (year == null) ? new Date().getFullYear() : year;
     
-    charIndex = 0;
+    printLine("$ cal " + year);
+    var calendarData = calendar.getData(year, jpmode);
+    for (var i = 0; i < calendarData.length; i++) {
+      printLine(calendarData[i]);
+    }
+    printCursor();
+    indicateTodaysDate();
+    
+    currentLine = 0;
+    updatePageTitle();
   }
   
   initialize();

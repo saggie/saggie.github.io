@@ -22,40 +22,28 @@ var Fonts = function() {
     fontsReady = true;
   };
   
-  function getImageXAddress(char) {
-    return ((char.charCodeAt(0) - 32) % 16) * fontWidth;
-  }
+  function getImageXAddress(charCode) { return ((charCode - 32) % 16) * fontWidth; }
+  function getImageYAddress(charCode) { return ((charCode - 32) / 16 | 0) * fontHeight; }
   
-  function getImageYAddress(char) {
-    return parseInt((char.charCodeAt(0) - 32) / 16) * fontHeight;
-  }
+  function getRedAddress(x, y, width)   { return (x * colorOffset + redOffset)   + (y * width * colorOffset); }
+  function getGreenAddress(x, y, width) { return (x * colorOffset + greenOffset) + (y * width * colorOffset); }
+  function getBlueAddress(x, y, width)  { return (x * colorOffset + blueOffset)  + (y * width * colorOffset); }
   
-  function getRedAddress(x, y) {
-    return (x * colorOffset + redOffset) + (y * fontsData.width * colorOffset);
-  }
-  
-  function getGreenAddress(x, y) {
-    return (x * colorOffset + greenOffset) + (y * fontsData.width * colorOffset);
-  }
-  
-  function getBlueAddress(x, y) {
-    return (x * colorOffset + blueOffset) + (y * fontsData.width * colorOffset);
-  }
-  
-  function getRgb(x, y) {
-    var red = fontsData.data[getRedAddress(x, y)];
-    var green = fontsData.data[getGreenAddress(x, y)];
-    var blue = fontsData.data[getBlueAddress(x, y)];
+  function getRgbFromFontsData(x, y) {
+    var red   = fontsData.data[getRedAddress(x, y, fontsData.width)];
+    var green = fontsData.data[getGreenAddress(x, y, fontsData.width)];
+    var blue  = fontsData.data[getBlueAddress(x, y, fontsData.width)];
     return 'rgb(' + red + ', ' + green + ', ' + blue + ')';
   }
   
-  this.getData = function (char) {
-    var x = getImageXAddress(char);
-    var y = getImageYAddress(char);
+  this.getFontRgbData = function (char) {
+    var charCode = (char == "DEL") ? 127 : char.charCodeAt(0);
+    var x = getImageXAddress(charCode);
+    var y = getImageYAddress(charCode);
     var ret = [];
     for (var i = 0; i < fontWidth; i++) {
       for (var j = 0; j < fontHeight; j++) {
-        ret[i + j * fontWidth] = getRgb(x + i, y + j);
+        ret[i + j * fontWidth] = getRgbFromFontsData(x + i, y + j);
       }
     }
     return ret;
