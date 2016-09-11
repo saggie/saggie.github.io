@@ -3,6 +3,9 @@
 var Calendar = function() {
   var data = null,
       isCalculationFinished = false,
+      today = new Date(),
+      todaysColumnPosition,
+      todaysLinePosition,
       dayOfWeekEn = "Su Mo Tu We Th Fr Sa",
       dayOfWeekJa = "ì˙ åé âŒ êÖ ñÿ ã‡ ìy",
       monthsEn = [
@@ -42,6 +45,8 @@ var Calendar = function() {
       spanForFormat = "                    ",
       maxLineLengthForMonthlyCalendar = 8,
       maxColumnLengthForMonthlyCalendar = dayOfWeekEn.length,
+      JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5,
+      JUL = 6, AUG = 7, SEP = 8, OCT = 9, NOV = 10, DEC = 11,
       SATURDAY = 6;
   
   function isLeapYear(year) {
@@ -50,6 +55,46 @@ var Calendar = function() {
   
   function getLastDateOfMonth(year, month) {
     return (month == 1 && isLeapYear(year)) ? 29 : lastDatesOfMonth[month]
+  }
+  
+  this.getTodaysColumnPosition = function () { return todaysColumnPosition; };
+  this.getTodaysLinePosition = function () { return todaysLinePosition; };
+  
+  function setTodaysPosition(line) {
+    
+    // set base position
+    todaysColumnPosition = 0;
+    todaysLinePosition = 2;
+    
+    // alias
+    var offsetCol = maxColumnLengthForMonthlyCalendar;
+    var offsetRow = maxLineLengthForMonthlyCalendar;
+    
+    // offset by month
+    switch (today.getMonth()) {
+      case JAN: todaysColumnPosition += 0;                   todaysLinePosition += 0; break;
+      case FEB: todaysColumnPosition += (offsetCol + 2);     todaysLinePosition += 0; break;
+      case MAR: todaysColumnPosition += (offsetCol + 2) * 2; todaysLinePosition += 0; break;
+      case APR: todaysColumnPosition += 0;                   todaysLinePosition += offsetRow; break;
+      case MAY: todaysColumnPosition += (offsetCol + 2);     todaysLinePosition += offsetRow; break;
+      case JUN: todaysColumnPosition += (offsetCol + 2) * 2; todaysLinePosition += offsetRow; break;
+      case JUL: todaysColumnPosition += 0;                   todaysLinePosition += offsetRow * 2; break;
+      case AUG: todaysColumnPosition += (offsetCol + 2);     todaysLinePosition += offsetRow * 2; break;
+      case SEP: todaysColumnPosition += (offsetCol + 2) * 2; todaysLinePosition += offsetRow * 2; break;
+      case OCT: todaysColumnPosition += 0;                   todaysLinePosition += offsetRow * 3; break;
+      case NOV: todaysColumnPosition += (offsetCol + 2);     todaysLinePosition += offsetRow * 3; break;
+      case DEC: todaysColumnPosition += (offsetCol + 2) * 2; todaysLinePosition += offsetRow * 3; break;
+    }
+    
+    // offset by date
+    todaysColumnPosition += today.getDay() * 3;
+    todaysLinePosition += line;
+  }
+  
+  function isToday (other) {
+    return today.getFullYear() == other.getFullYear() &&
+           today.getMonth() == other.getMonth() &&
+           today.getDate() == other.getDate();
   }
   
   function createMonthlyCalender(year, month, jpmode) {
@@ -77,8 +122,11 @@ var Calendar = function() {
       
       ret[line] += (" " + date).slice(-2);
       
-      var day = new Date(year, month, date).getDay();
-      if (day < SATURDAY) {
+      var targetDate = new Date(year, month, date);
+      
+      if (isToday(targetDate)) { setTodaysPosition(line); }
+      
+      if (targetDate.getDay() < SATURDAY) {
         ret[line] +=  " ";
       } else {
         // when reached Saturday then go to next line

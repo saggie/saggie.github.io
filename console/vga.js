@@ -12,7 +12,7 @@
       dotSize,
       year = null,
       jpmode = false,
-      indicateToday = false,
+      indicateToday = true,
       blinkCursor = true,
       currentLine = 0,
       fonts = new Fonts(),
@@ -84,20 +84,31 @@
     context.fillRect(x * dotSize + leftMargin, y * dotSize, dotSize, dotSize);
   }
   
-  function drawFont(char, col, row) {
+  function drawFont(char, column, line, highlightMode) {
     var fontRgbData = fonts.getFontRgbData(char);
+    
+    var targetColumnPosition = column * fontWidth;
+    var targetLinePositioin = line * fontHeight;
+    
     for (var i = 0; i < fontRgbData.length; i++) {
-      var x = i % fontWidth;
-      var y = i / fontWidth | 0;
-      if (fontRgbData[i] == 'rgb(0, 0, 0)') { continue; }
-      drawDot(fontRgbData[i], (col * fontWidth) + x, (row * fontHeight) + y);
+      var xi = i % fontWidth;
+      var yi = i / fontWidth | 0;
+      
+      if (highlightMode) {
+        if      (fontRgbData[i] == 'rgb(0, 0, 0)')       { fontRgbData[i] = 'rgb(170, 170, 170)'; }
+        else if (fontRgbData[i] == 'rgb(170, 170, 170)') { fontRgbData[i] = 'rgb(0, 0, 0)'; }
+      } else {
+        if (fontRgbData[i] == 'rgb(0, 0, 0)') { continue; } // to improve performance
+      }
+      
+      drawDot(fontRgbData[i], targetColumnPosition + xi, targetLinePositioin + yi);
     }
   }
   
   function printLine(str) {
     for (var i = 0; i < str.length; i++) {
-      if (str.charAt(i) == ' ') { continue; }
-      drawFont(str.charAt(i), i, currentLine);
+      if (str.charAt(i) == ' ') { continue; } // to improve performance
+      drawFont(str.charAt(i), i, currentLine, false);
     }
     currentLine++;
   }
@@ -112,7 +123,12 @@
   function indicateTodaysDate() {
     var today = new Date();
     if (!indicateToday || year != today.getFullYear()) { return; }
-    //highlightString(month, date); // TODO
+    
+    var todaysFont1 = (today.getDate() < 10) ? " " : today.getDate() / 10 | 0;
+    var todaysFont2 = today.getDate() % 10;
+    
+    drawFont(todaysFont1.toString(), calendar.getTodaysColumnPosition(),     calendar.getTodaysLinePosition() + 1, true);
+    drawFont(todaysFont2.toString(), calendar.getTodaysColumnPosition() + 1, calendar.getTodaysLinePosition() + 1, true);
   }
   
   function updatePageTitle() {
