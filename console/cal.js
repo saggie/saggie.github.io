@@ -7,7 +7,7 @@ var Calendar = function() {
       todaysColumnPosition,
       todaysLinePosition,
       dayOfWeekEn = "Su Mo Tu We Th Fr Sa",
-      dayOfWeekJa = "“ú Œ ‰Î … –Ø ‹à “y",
+      dayOfWeekJa = "æ—¥  æœˆ  ç«  æ°´  æœ¨  é‡‘  åœŸ ",
       monthsEn = [
         "      January       ",
         "      February      ",
@@ -23,18 +23,18 @@ var Calendar = function() {
         "      December      "
       ],
       monthsJp = [
-        "         1Œ        ",
-        "         2Œ        ",
-        "         3Œ        ",
-        "         4Œ        ",
-        "         5Œ        ",
-        "         6Œ        ",
-        "         7Œ        ",
-        "         8Œ        ",
-        "         9Œ        ",
-        "        10Œ        ",
-        "        11Œ        ",
-        "        12Œ        "
+        "         1æœˆ         ",
+        "         2æœˆ         ",
+        "         3æœˆ         ",
+        "         4æœˆ         ",
+        "         5æœˆ         ",
+        "         6æœˆ         ",
+        "         7æœˆ         ",
+        "         8æœˆ         ",
+        "         9æœˆ         ",
+        "        10æœˆ         ",
+        "        11æœˆ         ",
+        "        12æœˆ         "
       ],
       calendarOfGregorianReformation = [
         "       1  2 14 15 16",
@@ -100,7 +100,7 @@ var Calendar = function() {
   function createMonthlyCalender(year, month, jpmode) {
     var ret = [];
     
-    ret[0] = (jpmode) ? monthJp[month] : monthsEn[month];
+    ret[0] = (jpmode) ? monthsJp[month] : monthsEn[month];
     ret[1] = (jpmode) ? dayOfWeekJa : dayOfWeekEn;
     ret[2] = "";
     ret[3] = "";

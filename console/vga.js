@@ -84,6 +84,10 @@
     context.fillRect(x * dotSize + leftMargin, y * dotSize, dotSize, dotSize);
   }
   
+  function isEmFont(char) {
+    return char.charCodeAt(0) > 127;
+  }
+  
   function drawFont(char, column, line, highlightMode) {
     var fontRgbData = fonts.getFontRgbData(char);
     
@@ -91,8 +95,9 @@
     var targetLinePositioin = line * fontHeight;
     
     for (var i = 0; i < fontRgbData.length; i++) {
-      var xi = i % fontWidth;
-      var yi = i / fontWidth | 0;
+      var width = isEmFont(char) ? emFontWidth : fontWidth;
+      var xi = i % width;
+      var yi = i / width | 0;
       
       if (highlightMode) {
         if      (fontRgbData[i] == 'rgb(0, 0, 0)')       { fontRgbData[i] = 'rgb(170, 170, 170)'; }
