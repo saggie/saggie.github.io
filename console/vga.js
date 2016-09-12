@@ -143,11 +143,11 @@
     drawFont(todaysFont2.toString(), calendar.getTodaysColumnPosition() + 1, calendar.getTodaysLinePosition() + 1, true);
   }
   
-  function getCommandString () {
+  function getCommandString() {
     var ret = "$ cal ";
     
-    if (isYearSpecified)  { ret += year; return ret; }
     if (showRecentMonths) { ret += "-3"; return ret; }
+    if (isYearSpecified)  { ret += year; return ret; }
     
     ret += "-y"; return ret;
   }
