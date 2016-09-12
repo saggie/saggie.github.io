@@ -147,7 +147,7 @@ var Calendar = function() {
     return ret;
   }
   
-  this.getData = function (year, jpmode) {
+  this.getAnnualData = function (year, jpmode) {
     
     if (isCalculationFinished) { return data; }
     
@@ -172,4 +172,35 @@ var Calendar = function() {
     return ret;
   }
   
+  this.get3MonthsData = function (jpmode) {
+    
+    if (isCalculationFinished) { return data; }
+    
+    //for test
+    //today = new Date(2016, 11, 1);
+    //today = new Date(2017, 0, 1);
+    
+    var thisYear = today.getFullYear();
+    var thisMonth = today.getMonth();
+    var lastMonth = today.getMonth() - 1;
+    var nextMonth = today.getMonth() + 1;
+    
+    var leftMonth = (lastMonth >= 0) ? createMonthlyCalender(thisYear, lastMonth, jpmode)
+                                     : createMonthlyCalender(thisYear-1, 11, jpmode);
+    
+    var centerMonth = createMonthlyCalender(thisYear, thisMonth, jpmode);
+    
+    var rightMonth  = (nextMonth <= 11) ? createMonthlyCalender(thisYear, nextMonth, jpmode)
+                                        : createMonthlyCalender(thisYear+1, 0, jpmode);
+    
+    var ret = [];
+    for (var i = 0; i < maxLineLengthForMonthlyCalendar; i++) {
+      ret[i] = leftMonth[i] + "  " + centerMonth[i]  + "  " + rightMonth[i];
+    }
+    
+    data = ret;
+    isCalculationFinished = true;
+    
+    return ret;
+  }
 };

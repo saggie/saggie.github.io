@@ -10,15 +10,27 @@
       aspectRatio = vgaWidth / vgaHeight,
       flameRate = 1,
       dotSize,
+      currentLine = 0,
+      isYearSpecified = false,
+      
+      // parameters
       year = null,
       jpmode = false,
       indicateToday = true,
       blinkCursor = true,
-      currentLine = 0,
+      showRecentMonths = false,
+      
       fonts = new Fonts(),
       calendar = new Calendar();
   
   function resize() {
+    
+    // shorten the screen height when 3 months mode
+    if (showRecentMonths) {
+      vgaHeight = 480 - 20 * fontHeight;
+      aspectRatio = vgaWidth / vgaHeight;
+    }
+    
     var screenWidth = window.innerWidth;
     var screenHeight = window.innerHeight;
     if (screenWidth > screenHeight * aspectRatio) {
@@ -43,6 +55,8 @@
     container.appendChild(canvas);
     document.body.appendChild(container);
     setPropertiesByQueryString();
+    
+    if (year != null) { isYearSpecified = true; }
   }
   
   function clamp(input, min, max) {
@@ -54,22 +68,15 @@
     for (var i = 0; i < queryStrings.length; i++) {
       var queryString = queryStrings[i].split('=');
       
-      if (queryString[0] == "year") {
-        year = clamp(queryString[1], 0, 9999);
-      }
+      var key = queryString[0];
+      var value = queryString[1];
       
-      // set jpmode if "?lang=jp"
-      if (queryString[0] == "lang") {
-        jpmode = (queryString[1] == 'ja') ? true : false;
-      }
+      if (key == "year")             { year = clamp(value, 0, 9999); }
+      if (key == "lang")             { jpmode = (value == 'ja') ? true : false; }
+      if (key == "indicateToday")    { indicateToday = (value == 1) ? true : false; }
+      if (key == "blinkCursor")      { blinkCursor = (value == 1) ? true : false; }
+      if (key == "showRecentMonths") { showRecentMonths = (value == 1) ? true : false; }
       
-      if (queryString[0] == "indicateToday") {
-        indicateToday = (queryString[1] == 1) ? true : false;
-      }
-      
-      if (queryString[0] == "blinkCursor") {
-        blinkCursor = (queryString[1] == 1) ? true : false;
-      }
     }
   }
 
@@ -136,8 +143,17 @@
     drawFont(todaysFont2.toString(), calendar.getTodaysColumnPosition() + 1, calendar.getTodaysLinePosition() + 1, true);
   }
   
+  function getCommandString () {
+    var ret = "$ cal ";
+    
+    if (isYearSpecified)  { ret += year; return ret; }
+    if (showRecentMonths) { ret += "-3"; return ret; }
+    
+    ret += "-y"; return ret;
+  }
+  
   function updatePageTitle() {
-    document.title = "$ cal " + year;
+    document.title = getCommandString();
   }
   
   function loop() {
@@ -145,12 +161,23 @@
     resize();
     clearScreen();
     
-    year = (year == null) ? new Date().getFullYear() : year;
+    printLine(getCommandString());
     
-    printLine("$ cal " + year);
-    var calendarData = calendar.getData(year, jpmode);
-    for (var i = 0; i < calendarData.length; i++) {
-      printLine(calendarData[i]);
+    if (showRecentMonths) {
+      // 3 months mode
+      var calendarData = calendar.get3MonthsData(jpmode);
+      for (var i = 0; i < calendarData.length; i++) {
+        if (calendarData[i] != "") {
+          printLine(calendarData[i]);
+        }
+      }
+    } else {
+      // annual mode
+      year = (year == null) ? new Date().getFullYear() : year;
+      var calendarData = calendar.getAnnualData(year, jpmode);
+      for (var i = 0; i < calendarData.length; i++) {
+        printLine(calendarData[i]);
+      }
     }
     printCursor();
     indicateTodaysDate();
