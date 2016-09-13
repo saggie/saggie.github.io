@@ -7,7 +7,7 @@
       context   = canvas.getContext('2d'),
       vgaWidth = 640 - 14 * fontWidth,
       vgaHeight = 480 + 6 * fontHeight,
-      flameRate = 0.9,
+      flameRate = 1.1,
       dotSize,
       currentLine = 0,
       isYearSpecified = false,
