@@ -2,7 +2,9 @@
 
 var Calendar = function() {
   var data = null,
+      data2 = null,
       isCalculationFinished = false,
+      isCalculationFinished2 = false,
       today = new Date(),
       todaysColumnPosition,
       todaysLinePosition,
@@ -205,6 +207,19 @@ var Calendar = function() {
     
     data = ret;
     isCalculationFinished = true;
+    
+    return ret;
+  }
+  
+  this.get1MonthData = function (year, month, jpmode, dataSlot) {
+    
+    if (dataSlot == 1 && isCalculationFinished) { return data; }
+    if (dataSlot == 2 && isCalculationFinished2) { return data2; }
+    
+    var ret = createMonthlyCalender(year, month, true, jpmode);
+    
+    if (dataSlot == 1) { data = ret; }
+    if (dataSlot == 2) { data2 = ret; }
     
     return ret;
   }

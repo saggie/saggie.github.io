@@ -7,8 +7,7 @@
       context   = canvas.getContext('2d'),
       vgaWidth = 640 - 14 * fontWidth,
       vgaHeight = 480 + 6 * fontHeight,
-      aspectRatio = vgaWidth / vgaHeight,
-      flameRate = 1,
+      flameRate = 0.9,
       dotSize,
       currentLine = 0,
       isYearSpecified = false,
@@ -18,18 +17,26 @@
       jpmode = false,
       indicateToday = true,
       blinkCursor = true,
-      threeMonthMode = false,
+      oneMonthMode = false,
+      twoMonthsMode = false,
+      threeMonthsMode = false,
       
       fonts = new Fonts(),
       calendar = new Calendar();
   
   function resize() {
     
-    // shorten the screen height when 3 months mode
-    if (threeMonthMode) {
-      vgaHeight = 480 - 20 * fontHeight;
-      aspectRatio = vgaWidth / vgaHeight;
+    // shorten the screen size along with the specified mode
+    if (oneMonthMode) {
+      vgaWidth = 640 - 58 * fontWidth,
+      vgaHeight = 480 - 19 * fontHeight;
+    } else if (twoMonthsMode) {
+      vgaWidth = 640 - 58 * fontWidth,
+      vgaHeight = 480 - 10 * fontHeight;
+    } else if (threeMonthsMode) {
+      vgaHeight = 480 - 19 * fontHeight;
     }
+    aspectRatio = vgaWidth / vgaHeight;
     
     var screenWidth = window.innerWidth;
     var screenHeight = window.innerHeight;
@@ -75,7 +82,12 @@
       if (key == "lang")          { jpmode = (value == 'ja') ? true : false; }
       if (key == "indicateToday") { indicateToday = (value == 1) ? true : false; }
       if (key == "blinkCursor")   { blinkCursor = (value == 1) ? true : false; }
-      if (key == "numOfMonths")   { if (value == 3) { threeMonthMode = true; } }
+      if (key == "numOfMonths") {
+        value = clamp(value, 1, 3);
+        if (value == 1) { oneMonthMode = true; }
+        if (value == 2) { twoMonthsMode = true; }
+        if (value == 3) { threeMonthsMode = true; }
+      }
     }
   }
 
@@ -142,17 +154,19 @@
     drawFont(todaysFont2.toString(), calendar.getTodaysColumnPosition() + 1, calendar.getTodaysLinePosition() + 1, true);
   }
   
-  function getCommandString() {
+  function getCalCommandString(arg1, arg2) {
     var ret = "$ cal ";
     
-    if (threeMonthMode)  { ret += "-3"; return ret; }
+    if (oneMonthMode || (twoMonthsMode && arg1 == null)) { return ret; }
+    if (twoMonthsMode) { ret += arg2 + " " + arg1; return ret; }
+    if (threeMonthsMode) { ret += "-3"; return ret; }
     if (isYearSpecified) { ret += year; return ret; }
     
     ret += "-y"; return ret;
   }
   
   function updatePageTitle() {
-    document.title = getCommandString();
+    document.title = getCalCommandString();
   }
   
   function loop() {
@@ -160,23 +174,42 @@
     resize();
     clearScreen();
     
-    printLine(getCommandString());
+    printLine(getCalCommandString());
     
-    year = (year == null) ? new Date().getFullYear() : year;
+    var today = new Date();
+    year = isYearSpecified ? year : today.getFullYear();
+    var calendarData;
     
-    if (threeMonthMode) {
-      // 3 months mode
-      var calendarData = calendar.get3MonthsData(jpmode);
-      for (var i = 0; i < calendarData.length; i++) {
-        printLine(calendarData[i]);
+    if (oneMonthMode) {
+      calendarData = calendar.get1MonthData(today.getFullYear(), today.getMonth(), jpmode, 1);
+    } else if (twoMonthsMode) {
+      
+      // generate & print current month's data
+      var thisYear = today.getFullYear();
+      var currentMonthData = calendar.get1MonthData(thisYear, today.getMonth(), jpmode, 1);
+      for (var i = 0; i < currentMonthData.length; i++) {
+        printLine(currentMonthData[i]);
       }
+      
+      // generate next month's data
+      var nextMonth = today.getMonth() + 1;
+      if (nextMonth == 12) {
+        nextMonth = 0;
+        thisYear = today.getFullYear() + 1;
+      }
+      printLine(getCalCommandString(thisYear, nextMonth+1));
+      calendarData = calendar.get1MonthData(thisYear, nextMonth, jpmode, 2);
+      
+    } else if (threeMonthsMode) {
+      calendarData = calendar.get3MonthsData(jpmode);
     } else {
-      // annual mode
-      var calendarData = calendar.getAnnualData(year, jpmode);
-      for (var i = 0; i < calendarData.length; i++) {
-        printLine(calendarData[i]);
-      }
+      calendarData = calendar.getAnnualData(year, jpmode);
     }
+    
+    for (var i = 0; i < calendarData.length; i++) {
+      printLine(calendarData[i]);
+    }
+    
     printCursor();
     indicateTodaysDate();
     
