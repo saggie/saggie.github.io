@@ -18,7 +18,7 @@
       jpmode = false,
       indicateToday = true,
       blinkCursor = true,
-      showRecentMonths = false,
+      threeMonthMode = false,
       
       fonts = new Fonts(),
       calendar = new Calendar();
@@ -26,7 +26,7 @@
   function resize() {
     
     // shorten the screen height when 3 months mode
-    if (showRecentMonths) {
+    if (threeMonthMode) {
       vgaHeight = 480 - 20 * fontHeight;
       aspectRatio = vgaWidth / vgaHeight;
     }
@@ -71,12 +71,11 @@
       var key = queryString[0];
       var value = queryString[1];
       
-      if (key == "year")             { year = clamp(value, 0, 9999); }
-      if (key == "lang")             { jpmode = (value == 'ja') ? true : false; }
-      if (key == "indicateToday")    { indicateToday = (value == 1) ? true : false; }
-      if (key == "blinkCursor")      { blinkCursor = (value == 1) ? true : false; }
-      if (key == "showRecentMonths") { showRecentMonths = (value == 1) ? true : false; }
-      
+      if (key == "year")          { year = clamp(value, 0, 9999); }
+      if (key == "lang")          { jpmode = (value == 'ja') ? true : false; }
+      if (key == "indicateToday") { indicateToday = (value == 1) ? true : false; }
+      if (key == "blinkCursor")   { blinkCursor = (value == 1) ? true : false; }
+      if (key == "numOfMonths")   { if (value == 3) { threeMonthMode = true; } }
     }
   }
 
@@ -146,8 +145,8 @@
   function getCommandString() {
     var ret = "$ cal ";
     
-    if (showRecentMonths) { ret += "-3"; return ret; }
-    if (isYearSpecified)  { ret += year; return ret; }
+    if (threeMonthMode)  { ret += "-3"; return ret; }
+    if (isYearSpecified) { ret += year; return ret; }
     
     ret += "-y"; return ret;
   }
@@ -163,17 +162,16 @@
     
     printLine(getCommandString());
     
-    if (showRecentMonths) {
+    year = (year == null) ? new Date().getFullYear() : year;
+    
+    if (threeMonthMode) {
       // 3 months mode
       var calendarData = calendar.get3MonthsData(jpmode);
       for (var i = 0; i < calendarData.length; i++) {
-        if (calendarData[i] != "") {
-          printLine(calendarData[i]);
-        }
+        printLine(calendarData[i]);
       }
     } else {
       // annual mode
-      year = (year == null) ? new Date().getFullYear() : year;
       var calendarData = calendar.getAnnualData(year, jpmode);
       for (var i = 0; i < calendarData.length; i++) {
         printLine(calendarData[i]);

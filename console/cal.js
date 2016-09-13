@@ -9,32 +9,28 @@ var Calendar = function() {
       dayOfWeekEn = "Su Mo Tu We Th Fr Sa",
       dayOfWeekJa = "日  月  火  水  木  金  土 ",
       monthsEn = [
-        "      January       ",
-        "      February      ",
-        "       March        ",
-        "       April        ",
-        "        May         ",
-        "        June        ",
-        "        July        ",
-        "       August       ",
-        "     September      ",
-        "      October       ",
-        "      November      ",
-        "      December      "
+        "      January       ", "      February      ", "       March        ",
+        "       April        ", "        May         ", "        June        ",
+        "        July        ", "       August       ", "     September      ",
+        "      October       ", "      November      ", "      December      "
+      ],
+      monthsWithYearEn = [
+        "    January ", "    February ", "     March ",
+        "     April ", "      May ", "      June ",
+        "      July ", "     August ", "   September ",
+        "    October ", "    November ", "    December "
       ],
       monthsJp = [
-        "         1月         ",
-        "         2月         ",
-        "         3月         ",
-        "         4月         ",
-        "         5月         ",
-        "         6月         ",
-        "         7月         ",
-        "         8月         ",
-        "         9月         ",
-        "        10月         ",
-        "        11月         ",
-        "        12月         "
+        "         1月         ", "         2月         ", "         3月         ",
+        "         4月         ", "         5月         ", "         6月         ",
+        "         7月         ", "         8月         ", "         9月         ",
+        "        10月         ", "        11月         ", "        12月         "
+      ],
+      monthsWithYearJp = [
+        "      1月  ", "      2月  ", "      3月  ",
+        "      4月  ", "      5月  ", "      6月  ",
+        "      7月  ", "      8月  ", "      9月  ",
+        "     10月  ", "     11月  ", "     12月  "
       ],
       calendarOfGregorianReformation = [
         "       1  2 14 15 16",
@@ -60,7 +56,12 @@ var Calendar = function() {
   this.getTodaysColumnPosition = function () { return todaysColumnPosition; };
   this.getTodaysLinePosition = function () { return todaysLinePosition; };
   
-  function setTodaysPosition(line) {
+  function setTodaysPositionForMonthlyMode(line, threeMonthMode) {
+    todaysColumnPosition = today.getDay() * 3;
+    todaysLinePosition = line;
+  }
+  
+  function setTodaysPositionForAnnualMode(line) {
     
     // set base position
     todaysColumnPosition = 0;
@@ -97,10 +98,12 @@ var Calendar = function() {
            today.getDate() == other.getDate();
   }
   
-  function createMonthlyCalender(year, month, jpmode) {
+  function createMonthlyCalender(year, month, withYear, jpmode) {
     var ret = [];
     
-    ret[0] = (jpmode) ? monthsJp[month] : monthsEn[month];
+    ret[0] = withYear ? jpmode ? monthsWithYearJp[month] + year
+                               : monthsWithYearEn[month] + year
+                      : jpmode ? monthsJp[month] : monthsEn[month];
     ret[1] = (jpmode) ? dayOfWeekJa : dayOfWeekEn;
     ret[2] = "";
     ret[3] = "";
@@ -117,14 +120,17 @@ var Calendar = function() {
       return ret;
     }
     
-    // put all days of the month (line: 2-7)
+    // input all days of the month (line: 2-7)
     for (var date = 1, line = 2; date <= getLastDateOfMonth(year, month); date++) {
       
       ret[line] += (" " + date).slice(-2);
       
       var targetDate = new Date(year, month, date);
       
-      if (isToday(targetDate)) { setTodaysPosition(line); }
+      if (isToday(targetDate)) {
+        if (withYear) { setTodaysPositionForMonthlyMode(line); }
+        else { setTodaysPositionForAnnualMode(line); }
+      }
       
       if (targetDate.getDay() < SATURDAY) {
         ret[line] +=  " ";
@@ -135,7 +141,7 @@ var Calendar = function() {
     }
     
     // format as calendar
-    for (var line = 2; line < maxLineLengthForMonthlyCalendar; line++) {
+    for (var line = 0; line < maxLineLengthForMonthlyCalendar; line++) {
       if (line == 2) {
         ret[line] = (spanForFormat + ret[line]).slice(-maxColumnLengthForMonthlyCalendar);
       } else {
@@ -158,9 +164,9 @@ var Calendar = function() {
     ret[index++] = "";
     
     for (var i = 0; i < 12; i += 3) {
-      var leftMonth   = createMonthlyCalender(year, i + 0, jpmode);
-      var centerMonth = createMonthlyCalender(year, i + 1, jpmode);
-      var rightMonth  = createMonthlyCalender(year, i + 2, jpmode);
+      var leftMonth   = createMonthlyCalender(year, i + 0, false, jpmode);
+      var centerMonth = createMonthlyCalender(year, i + 1, false, jpmode);
+      var rightMonth  = createMonthlyCalender(year, i + 2, false, jpmode);
       for (var j = 0; j < maxLineLengthForMonthlyCalendar; j++) {
         ret[index++] = leftMonth[j] + "  " + centerMonth[j]  + "  " + rightMonth[j];
       }
@@ -176,27 +182,26 @@ var Calendar = function() {
     
     if (isCalculationFinished) { return data; }
     
-    //for test
-    //today = new Date(2016, 11, 1);
-    //today = new Date(2017, 0, 1);
-    
     var thisYear = today.getFullYear();
     var thisMonth = today.getMonth();
     var lastMonth = today.getMonth() - 1;
     var nextMonth = today.getMonth() + 1;
     
-    var leftMonth = (lastMonth >= 0) ? createMonthlyCalender(thisYear, lastMonth, jpmode)
-                                     : createMonthlyCalender(thisYear-1, 11, jpmode);
+    var leftMonth = (lastMonth >= 0) ? createMonthlyCalender(thisYear, lastMonth, true, jpmode)
+                                     : createMonthlyCalender(thisYear-1, 11, true, jpmode);
     
-    var centerMonth = createMonthlyCalender(thisYear, thisMonth, jpmode);
+    var centerMonth = createMonthlyCalender(thisYear, thisMonth, true, jpmode);
     
-    var rightMonth  = (nextMonth <= 11) ? createMonthlyCalender(thisYear, nextMonth, jpmode)
-                                        : createMonthlyCalender(thisYear+1, 0, jpmode);
+    var rightMonth  = (nextMonth <= 11) ? createMonthlyCalender(thisYear, nextMonth, true, jpmode)
+                                        : createMonthlyCalender(thisYear+1, 0, true, jpmode);
     
     var ret = [];
     for (var i = 0; i < maxLineLengthForMonthlyCalendar; i++) {
       ret[i] = leftMonth[i] + "  " + centerMonth[i]  + "  " + rightMonth[i];
     }
+    
+    // move today's position to center
+    todaysColumnPosition += maxColumnLengthForMonthlyCalendar + 2;
     
     data = ret;
     isCalculationFinished = true;
