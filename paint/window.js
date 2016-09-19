@@ -7,6 +7,7 @@
   var frameRate = 1;
   var dotSize = 1;
   var frame = new Frame();
+  var mouse = new Mouse();
   var isFirstTime = true;
   
   function resize() {
@@ -25,6 +26,8 @@
     
     frame.init(canvas, context, dotSize);
     frame.repaint();
+    
+    mouse.init(canvas, context, dotSize);
   }
   
   window.addEventListener('resize', function(event) { resize(); });
