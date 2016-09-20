@@ -31,6 +31,13 @@ var UTIL = {
     return ret;
   },
   
+  disableImageSmoothing: function(context) {
+    context.mozImageSmoothingEnabled = false;
+    context.webkitImageSmoothingEnabled = false;
+    context.msImageSmoothingEnabled = false;
+    context.imageSmoothingEnabled = false;
+  },
+  
   drawString: function(g, col, text, x, y) {
     g.fillStyle = col;
     g.fillText(text, x, y);

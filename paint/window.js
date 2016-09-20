@@ -5,7 +5,7 @@
   var container = document.createElement('div');
   var context   = canvas.getContext('2d');
   var frameRate = 1;
-  var dotSize = 1;
+  var dotSize = 2;
   var frame = new Frame();
   var mouse = new Mouse();
   var isFirstTime = true;

@@ -79,8 +79,15 @@ var Frame = function() {
     if (dotSize < 2) {
       context.putImageData(frameBaseData, 0, 0);
     } else {
-      // TODO resize
-      context.putImageData(frameBaseData, 0, 0);
+      var zoomedWidth = frameBaseImage.width * dotSize;
+      var zoomedHeight = frameBaseImage.height * dotSize;
+      inner_canvas.width = zoomedWidth;
+      inner_canvas.height = zoomedHeight;
+      inner_context.imageSmoothingEnabled = false;
+      UTIL.disableImageSmoothing(inner_context);
+      inner_context.drawImage(frameBaseImage, 0, 0, zoomedWidth, zoomedHeight);
+      var zoomedFrameBaseData = inner_context.getImageData(0, 0, zoomedWidth, zoomedHeight);
+      context.putImageData(zoomedFrameBaseData, 0, 0);
     }
   }
   
