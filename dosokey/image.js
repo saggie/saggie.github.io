@@ -1,5 +1,5 @@
 
-// image data
+// global image data
 var loading_img = new Image(),
     bg_img = new Image(),
     hige_img = new Image(),
@@ -8,8 +8,8 @@ var loading_img = new Image(),
     clear_img = new Image(),
     stage_img = new Image(),
     stage_data = null;
-  
-var Images = function() {
+
+var images = (function() {
 
   // Image のロード完了フラグ
   var loading_img_ready = false,
@@ -44,7 +44,7 @@ var Images = function() {
     stage_data = hidden_context.getImageData(0, 0, hidden_canvas.width, hidden_canvas.height);
   };
 
-  this.areAllImagesReady = function () {
+  var areAllImagesReady = function () {
     return loading_img_ready &&
            bg_img_ready &&
            hige_img_ready &&
@@ -54,4 +54,8 @@ var Images = function() {
            stage_img_ready;
   };
 
-};
+  return {
+    areAllImagesReady: areAllImagesReady
+  };
+
+}());

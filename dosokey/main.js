@@ -1,6 +1,5 @@
 
 var globalTimeFrame = 0,
-    images          = new Images(),
     stage           = new Stage();
 
 (function () {
