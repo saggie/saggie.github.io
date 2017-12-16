@@ -1,5 +1,5 @@
 
-var Kong = function() {
+var kong = (function() {
 
   var nextTaruThrowingInterval = 0,
       previousTaruThrownTimeFrame = 0,
@@ -15,15 +15,15 @@ var Kong = function() {
   };
   var state = states["center1"];
 
-  this.getState = function () { return state; };
-  this.getStates = function (key) { return states[key]; };
+  var getState = function () { return state; };
+  var getStates = function (key) { return states[key]; };
 
-  function isTaruThrowingFinished () {
+  var _isTaruThrowingFinished = function () {
     return taru.length >= taruManager.getMaxNumber();
-  }
+  };
 
-  this.updateState = function () {
-    if (!isTaruThrowingFinished ()) {
+  var updateState = function () {
+    if (!_isTaruThrowingFinished ()) {
       var dividedInterval = parseInt(nextTaruThrowingInterval / 3);
       var erappesedTimeFrame = globalTimeFrame - previousTaruThrownTimeFrame
       if (erappesedTimeFrame > dividedInterval * 2) {
@@ -44,9 +44,9 @@ var Kong = function() {
     }
   };
 
-  this.throwTaru = function () {
+  var throwTaru = function () {
     
-    if (isTaruThrowingFinished ()) { return; }
+    if (_isTaruThrowingFinished ()) { return; }
     
     if (globalTimeFrame - previousTaruThrownTimeFrame < nextTaruThrowingInterval) {
       return;
@@ -61,5 +61,11 @@ var Kong = function() {
                                                  : parseInt(Math.random() * 18) + 3;
   };
 
-};
+  return {
+    getState: getState,
+    getStates: getStates,
+    updateState: updateState,
+    throwTaru: throwTaru
+  };
 
+}());
