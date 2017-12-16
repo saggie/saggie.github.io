@@ -1,4 +1,3 @@
-
 var hige = (function () {
 
   var spawnPx = 50,

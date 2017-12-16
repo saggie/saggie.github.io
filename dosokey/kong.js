@@ -1,4 +1,3 @@
-
 var kong = (function() {
 
   var nextTaruThrowingInterval = 0,

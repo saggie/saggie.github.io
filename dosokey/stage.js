@@ -1,4 +1,3 @@
-
 var stage = (function() {
 
   var colorOffset    = 4, // R=[i+0], G=[i+1], B=[1+2], A=[i+3], ...

@@ -1,4 +1,3 @@
-
 // タル管理オブジェクト
 var taruManager = (function () {
 
