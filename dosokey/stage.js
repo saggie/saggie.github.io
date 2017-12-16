@@ -4,7 +4,8 @@ var stage = (function() {
       redOffset      = 0,
       greenOffset    = 1,
       blueOffset     = 2,
-      stageThickness = 8; // ステージの厚さ
+      stageThickness = 8, // ステージの厚さ
+      threshold = parseInt(255 / 2);
 
   var _getRedAddress = function (x, y) {
     return (x * colorOffset + redOffset) + (y * stage_data.width * colorOffset);
@@ -40,14 +41,14 @@ var stage = (function() {
     var address7 = _getRedAddress(rightX2, lowerY2); // lower-right
     var address8 = _getRedAddress(rightX1, centerY); // right-end
 
-    return (stage_data.data[address1] == 255) ||
-           (stage_data.data[address2] == 255) ||
-           (stage_data.data[address3] == 255) ||
-           (stage_data.data[address4] == 255) ||
-           (stage_data.data[address5] == 255) ||
-           (stage_data.data[address6] == 255) ||
-           (stage_data.data[address7] == 255) ||
-           (stage_data.data[address8] == 255);
+    return (stage_data.data[address1] > threshold) ||
+           (stage_data.data[address2] > threshold) ||
+           (stage_data.data[address3] > threshold) ||
+           (stage_data.data[address4] > threshold) ||
+           (stage_data.data[address5] > threshold) ||
+           (stage_data.data[address6] > threshold) ||
+           (stage_data.data[address7] > threshold) ||
+           (stage_data.data[address8] > threshold);
   };
 
   var getTaruEscapeDistance = function (x, y) {
@@ -73,8 +74,8 @@ var stage = (function() {
     var address1 = _getRedAddress(x, y + size);
     var address2 = _getRedAddress(x + size, y + size);
 
-    return (stage_data.data[address1] == 255) ||
-           (stage_data.data[address2] == 255);
+    return (stage_data.data[address1] > threshold) ||
+           (stage_data.data[address2] > threshold);
   };
 
   var getHigeEscapeDistance = function (x, y) {
@@ -110,9 +111,9 @@ var stage = (function() {
     var address2 = _getGreenAddress(x, y - 1);
     var address3 = _getGreenAddress(x, y + 1);
 
-    return (stage_data.data[address1] == 255 ||
-            stage_data.data[address2] == 255 ||
-            stage_data.data[address3] == 255);
+    return (stage_data.data[address1] > threshold ||
+            stage_data.data[address2] > threshold ||
+            stage_data.data[address3] > threshold);
   };
 
   var isHigeAwayFromTheLadder = function (x, y) {
@@ -128,10 +129,10 @@ var stage = (function() {
     var address3 = _getBlueAddress(x + size, y);
     var address4 = _getBlueAddress(x + size, y + size);
 
-    return (stage_data.data[address1] == 255) ||
-           (stage_data.data[address2] == 255) ||
-           (stage_data.data[address3] == 255) ||
-           (stage_data.data[address4] == 255);
+    return (stage_data.data[address1] > threshold) ||
+           (stage_data.data[address2] > threshold) ||
+           (stage_data.data[address3] > threshold) ||
+           (stage_data.data[address4] > threshold);
   };
 
   return {
