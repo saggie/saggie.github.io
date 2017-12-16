@@ -1,7 +1,6 @@
 
 var globalTimeFrame = 0,
     images          = new Images(),
-    taruManager     = new TaruManager(),
     stage           = new Stage();
 
 (function () {

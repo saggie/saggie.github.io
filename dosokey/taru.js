@@ -1,6 +1,6 @@
 
 // タル管理オブジェクト
-var TaruManager = function () {
+var taruManager = (function () {
 
   var size = 11,
       radius = parseInt(size / 2),
@@ -14,9 +14,9 @@ var TaruManager = function () {
       nextTaruThrowingInterval = 0,
       previousTaruThrownTime = 0;
 
-  this.getSize = function() { return size; };
-  this.getRadius = function () { return radius; };
-  this.getMaxNumber = function () { return numMax; };
+  var getSize = function() { return size; };
+  var getRadius = function () { return radius; };
+  var getMaxNumber = function () { return numMax; };
 
   // タルプロト
   var taruProto = {
@@ -142,7 +142,7 @@ var TaruManager = function () {
     }
   };
 
-  this.generateTaru = function (init_vx, init_vy) {
+  var generateTaru = function (init_vx, init_vy) {
     var newTaru = Object.create(taruProto);
     newTaru.id = taru.length;
     newTaru.px = spawnPx;
@@ -154,7 +154,7 @@ var TaruManager = function () {
     return newTaru;
   };
 
-  this.calcAll = function () {
+  var calcAll = function () {
     for (var i = 0; i < taru.length; i++) {
       taru[i].calc();
       calculatedTaruIdList.push(i);
@@ -162,4 +162,12 @@ var TaruManager = function () {
     calculatedTaruIdList = [];
   };
 
-};
+  return {
+    getSize: getSize,
+    getRadius: getRadius,
+    getMaxNumber: getMaxNumber,
+    generateTaru: generateTaru,
+    calcAll: calcAll
+  };
+
+}());
