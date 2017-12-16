@@ -1,6 +1,5 @@
 
-var globalTimeFrame = 0,
-    stage           = new Stage();
+var globalTimeFrame = 0;
 
 (function () {
 
