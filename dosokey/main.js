@@ -1,6 +1,3 @@
-
-var globalTimeFrame = 0;
-
 (function () {
 
   var flameRate = 30,

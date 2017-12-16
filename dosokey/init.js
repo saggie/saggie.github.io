@@ -10,4 +10,4 @@ var scale = 2,
 var gravity = 0.3;
 
 var taru = []; // タルリスト
-
+var globalTimeFrame = 0;
