@@ -3,7 +3,6 @@ var globalTimeFrame = 0,
     images          = new Images(),
     kong            = new Kong(),
     taruManager     = new TaruManager(),
-    hige            = new Hige(),
     stage           = new Stage();
 
 (function () {

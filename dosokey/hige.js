@@ -1,5 +1,5 @@
 
-var Hige = function () {
+var hige = (function () {
 
   var spawnPx = 50,
       spawnPy = 192,
@@ -12,7 +12,7 @@ var Hige = function () {
       isLaddering = false,
       isFacingRight = true,
       isAtBottom = false,
-      isCleared = false;
+      _isCleared = false;
 
   var states = {
     right_stand: 0,
@@ -28,17 +28,17 @@ var Hige = function () {
   };
   var state = states["right_stand"];
 
-  this.getPx = function () {return px; };
-  this.getPy = function () { return py; };
-  this.getSize = function () { return size; }
-  this.getState = function () { return state; };
-  this.getStates = function (key) { return states[key]; };
-  this.isCleared = function () { return isCleared; }
+  var getPx = function () {return px; };
+  var getPy = function () { return py; };
+  var getSize = function () { return size; }
+  var getState = function () { return state; };
+  var getStates = function (key) { return states[key]; };
+  var isCleared = function () { return _isCleared; }
 
-  this.addPx = function (val) { px += val; };
-  this.addPy = function (val) { py += val; };
+  var addPx = function (val) { px += val; };
+  var addPy = function (val) { py += val; };
 
-  this.updateState = function () {
+  var updateState = function () {
 
     if (isLaddering) {
       state = (movingCount % 8 < 4) ? states["climb1"] : states["climb2"];
@@ -64,7 +64,7 @@ var Hige = function () {
     }
   };
 
-  this.tryMove = function () {
+  var tryMove = function () {
 
     // ハシゴ昇降の継続判定
     if (isLaddering && stage.isHigeAwayFromTheLadder(px, py)) {
@@ -126,8 +126,21 @@ var Hige = function () {
     
     // クリア判定
     if (stage.isHigeAtTheGoalArea(px, py) && isGrounded && !isLaddering) {
-      isCleared = true;
+      _isCleared = true;
     }
   };
 
-};
+  return {
+    getPx: getPx,
+    getPy: getPy,
+    getSize: getSize,
+    getState: getState,
+    getStates: getStates,
+    isCleared: isCleared,
+    addPx: addPx,
+    addPy: addPy,
+    updateState: updateState,
+    tryMove: tryMove
+  };
+
+}());
