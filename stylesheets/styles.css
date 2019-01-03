@@ -56,7 +56,7 @@
 
 body {
   background-color: #fff;
-  padding: 50px 100px 50px 100px;
+  padding: 50px;
   font: 14px/1.5 "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color:#727272;
   font-weight:400;
@@ -68,7 +68,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 p, ul, ol, table, pre, dl {
-  margin:0 0 50px;
+  margin:0 0 20px;
 }
 
 h1, h2, h3 {
@@ -325,4 +325,22 @@ footer {
 
 a:hover img {
   opacity: 0.6;
+}
+
+#flexbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#flexbox div {
+  text-align: left;
+  margin: 0 0 40px;
+}
+
+#flexbox #title {
+  width: 1000px;
+  max-width: 100%;
+  margin: 0 0 20px;
 }
